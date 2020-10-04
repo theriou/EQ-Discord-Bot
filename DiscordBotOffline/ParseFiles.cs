@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,6 +67,26 @@ namespace DiscordBotOffline
             Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} Count: {parseName.Count()}"); Console.ResetColor();
 
             return parseName;
+        }
+
+        public class PatchJson
+        {
+            public string Patch { get; set; }
+            public string Date { get; set; }
+            public string Link { get; set; }
+        }
+
+        public static string[] ParsePatchFile()
+        {
+            PatchJson patchFile = JsonConvert.DeserializeObject<PatchJson>(File.ReadAllText(@"patch.json"));
+            string patchOutput = string.Empty,
+                        patchDescription = patchFile.Patch,
+                        patchDate = patchFile.Date,
+                        patchLink = patchFile.Link;
+
+            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Patch File Loaded"); Console.ResetColor();
+
+            return new[] { patchDescription, patchDate, patchLink };
         }
     }
 }

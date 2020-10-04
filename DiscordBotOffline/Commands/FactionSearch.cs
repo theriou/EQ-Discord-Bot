@@ -32,7 +32,7 @@ namespace DiscordBotOffline.Commands
                 else if (factionBeta == true)
                 {
                     factionReturn = GlobalResults.GlobalResult(factionSearch, "factionb");
-                    factionDBSource = "Test";
+                    factionDBSource = "Beta";
                 }
                 else
                 {

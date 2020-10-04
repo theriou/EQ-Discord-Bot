@@ -28,6 +28,7 @@ namespace DiscordBotOffline
         public static Dictionary<ulong, string> achieveBetaName = ParseFiles.ParseFile("achieve", "beta");
 
         public static Dictionary<ulong, string> itemName = ParseFiles.ParseFile("item", "");
+        public static string[] patchData = ParseFiles.ParsePatchFile();
 
         public static Dictionary<ulong, string> GetResults(string resultType)
         {

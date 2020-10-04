@@ -32,7 +32,7 @@ namespace DiscordBotOffline.Commands
                 else if (spellBeta == true)
                 {
                     spellReturn = GlobalResults.GlobalResult(spellSearch, "spellb");
-                    spellDBSource = "Test";
+                    spellDBSource = "Beta";
                 }
                 else
                 {

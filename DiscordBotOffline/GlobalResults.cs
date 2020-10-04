@@ -1,18 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DiscordBotOffline
 {
-    public class PatchJson
-    {
-        public string Patch { get; set; }
-        public string Date { get; set; }
-        public string Link { get; set; }
-    }
+
     class GlobalResults
     {
         public static string GlobalResult(string nameSearch, string urlType)
@@ -21,17 +14,16 @@ namespace DiscordBotOffline
             string gotSourceType = getGlobalResults[0],
                 gotOutputUrl = getGlobalResults[1],
                 gotDbSource = getGlobalResults[2];
+            string[] getPatchData = Globals.patchData;
+            string patchDescription = getPatchData[0],
+                patchDate = getPatchData[1],
+                patchLink = getPatchData[2];
             int listCap;
             Dictionary<ulong,string> searchSource = Globals.GetResults(urlType);
 
             if (urlType == "patch")
             {
-                PatchJson patchFile = JsonConvert.DeserializeObject<PatchJson>(File.ReadAllText(@"patch.json"));
-
-                string patchOutput = string.Empty,
-                        patchDescription = patchFile.Patch,
-                        patchDate = patchFile.Date,
-                        patchLink = patchFile.Link;
+                string patchOutput = string.Empty;
 
                 TimeSpan patchTime = DateTime.Parse(patchDate) - DateTime.Now;
                 if (patchTime.TotalSeconds < 0)

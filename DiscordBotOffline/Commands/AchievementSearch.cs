@@ -32,7 +32,7 @@ namespace DiscordBotOffline.Commands
                 else if (achieveBeta == true)
                 {
                     achieveReturn = GlobalResults.GlobalResult(achieveSearch, "achieveb");
-                    achieveDBSource = "Test";
+                    achieveDBSource = "Beta";
                 }
                 else
                 {
