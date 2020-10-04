@@ -1,7 +1,9 @@
 # EQ Discord Bot Offline
  EQ Discord Bot that uses Offline files for data instead of pinging Websites\
 \
-If you want a Lite version that only requires one Version of files, check it out: https://github.com/theriou/EQ-Discord-Bot-Offline-Lite
+If you want a Lite version that only requires one Version of files, check it out: https://github.com/theriou/EQ-Discord-Bot-Offline-Lite \
+\
+You can see a working version (when EQRLinkBot is online) in the EQ Resource Discord: `https://discord.gg/AwbHXak`\
 \
 Requires a Discord Bot set up to your discord server, recommended to google this\
 \
