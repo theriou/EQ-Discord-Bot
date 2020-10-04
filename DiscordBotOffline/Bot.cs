@@ -61,6 +61,7 @@ namespace DiscordBotOffline
                 Commands.RegisterCommands<Help>();
                 Commands.RegisterCommands<ItemSearch>();
                 //Commands.RegisterCommands<OverseerSearch>();
+                Commands.RegisterCommands<Reload>();
                 Commands.RegisterCommands<SpellSearch>();
                 //Commands.RegisterCommands<TradeSkillSearch>();
 

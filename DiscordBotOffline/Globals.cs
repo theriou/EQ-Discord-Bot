@@ -4,7 +4,8 @@ namespace DiscordBotOffline
 {
     class Globals
     {
-        public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels();
+        public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
+        public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
 
         public static Dictionary<ulong, string> spellLiveName = ParseFiles.ParseFile("spell", "live");
         public static Dictionary<ulong, string>[] dbStrResultsL = MultiParseFiles.ParseDBStrFiles("live");
@@ -138,6 +139,43 @@ namespace DiscordBotOffline
             }
 
             return new[] { sourceType, outputUrl, dbSource };
+        }
+
+        public static void ReloadValues(string reloadType)
+        {
+            switch (reloadType)
+            {
+                case "spell":
+                    spellLiveName = ParseFiles.ParseFile("spell", "live");
+                    spellTestName = ParseFiles.ParseFile("spell", "test");
+                    spellBetaName = ParseFiles.ParseFile("spell", "beta");
+                    break;
+                case "dbstr":
+                    dbStrResultsL = MultiParseFiles.ParseDBStrFiles("live");
+                    factionLiveName = dbStrResultsL[0];
+                    overseerLiveAgent = dbStrResultsL[1];
+                    overseerLiveQuest = dbStrResultsL[2];
+                    dbStrResultsT = MultiParseFiles.ParseDBStrFiles("test");
+                    factionTestName = dbStrResultsT[0];
+                    overseerTestAgent = dbStrResultsT[1];
+                    overseerTestQuest = dbStrResultsT[2];
+                    dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
+                    factionBetaName = dbStrResultsB[0];
+                    overseerBetaAgent = dbStrResultsB[1];
+                    overseerBetaQuest = dbStrResultsB[2];
+                    break;
+                case "achieve":
+                    achieveLiveName = ParseFiles.ParseFile("achieve", "live");
+                    achieveTestName = ParseFiles.ParseFile("achieve", "test");
+                    achieveBetaName = ParseFiles.ParseFile("achieve", "beta");
+                    break;
+                case "item":
+                    itemName = ParseFiles.ParseFile("item", "");
+                    break;
+                case "patch":
+                    patchData = ParseFiles.ParsePatchFile();
+                    break;
+            }
         }
     }
 }
