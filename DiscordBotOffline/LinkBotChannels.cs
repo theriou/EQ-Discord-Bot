@@ -23,18 +23,18 @@ namespace DiscordBotOffline
 
             if (channelFile)
             {
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Allowed {pathType}Channel File Found"); Console.ResetColor();
                 string[] dataList = File.ReadAllLines(path);
                 ulong[] channelList = dataList.Select(x => ulong.Parse(x)).ToArray();
+                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Allowed {pathType}Channel: {channelList.Count()}"); Console.ResetColor();
 
                 return channelList;
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine($"Allowed {pathType}Channel File Not Found..."); Console.ResetColor();
                 string[] channelFileNotFound = new string[] { "0" };
                 ulong[] channelNotFound = channelFileNotFound.Select(i => ulong.Parse(i)).ToArray();
-                    
+                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine($"Allowed {pathType}Channel File Not Found..."); Console.ResetColor();
+
                 return channelNotFound;
             }
         }

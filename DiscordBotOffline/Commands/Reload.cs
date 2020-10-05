@@ -9,7 +9,7 @@ namespace DiscordBotOffline.Commands
 {
     class Reload : BaseCommandModule
     {
-        [Command("reload"), Aliases("reloads", "reloadd", "reloada", "reloadi", "reloadp")]
+        [Command("reload"), Aliases("reloada", "reloadc", "reloadd", "reloadi", "reloadp", "reloads")]
         public async Task EQRPatch(CommandContext ctx)
         {
             if (Globals.channelsAllowedAdmin.Contains(ctx.Channel.Id))
@@ -19,11 +19,12 @@ namespace DiscordBotOffline.Commands
                 Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Attempting to Reload"); Console.ResetColor();
 
                 string getReloadType = ctx.Message.ToString();
-                bool reloadSpells = getReloadType.Contains(ctx.Prefix + "reloads"),
+                bool reloadAchieve = getReloadType.Contains(ctx.Prefix + "reloada"),
+                    reloadChannels = getReloadType.Contains(ctx.Prefix + "reloadc"),
                     reloadDbStr = getReloadType.Contains(ctx.Prefix + "reloadd"),
-                    reloadAchieve = getReloadType.Contains(ctx.Prefix + "reloada"),
                     reloadItems = getReloadType.Contains(ctx.Prefix + "reloadi"),
-                    reloadPatch = getReloadType.Contains(ctx.Prefix + "reloadp");
+                    reloadPatch = getReloadType.Contains(ctx.Prefix + "reloadp"),
+                    reloadSpells = getReloadType.Contains(ctx.Prefix + "reloads");
                 string reloadSection = string.Empty;
 
                 if (ctx.Member.IsBot)
@@ -32,20 +33,20 @@ namespace DiscordBotOffline.Commands
                 }
                 else
                 {
-                    if (reloadSpells == true)
+                    if (reloadAchieve == true)
                     {
-                        Globals.ReloadValues("spell");
-                        reloadSection = "Spell Reload";
+                        Globals.ReloadValues("achieve");
+                        reloadSection = "Achievement Reload";
+                    }
+                    else if (reloadChannels == true)
+                    {
+                        Globals.ReloadValues("channel");
+                        reloadSection = "Channel Reload";
                     }
                     else if (reloadDbStr == true)
                     {
                         Globals.ReloadValues("dbstr");
                         reloadSection = "Faction and Overseer Reload";
-                    }
-                    else if (reloadAchieve == true)
-                    {
-                        Globals.ReloadValues("achieve");
-                        reloadSection = "Achievement Reload";
                     }
                     else if (reloadItems == true)
                     {
@@ -56,6 +57,11 @@ namespace DiscordBotOffline.Commands
                     {
                         Globals.ReloadValues("patch");
                         reloadSection = "Patch Reload";
+                    }
+                    else if (reloadSpells == true)
+                    {
+                        Globals.ReloadValues("spell");
+                        reloadSection = "Spell Reload";
                     }
 
                     reloadSection += " should be Completed!";

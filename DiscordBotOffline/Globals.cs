@@ -175,6 +175,10 @@ namespace DiscordBotOffline
                 case "patch":
                     patchData = ParseFiles.ParsePatchFile();
                     break;
+                case "channel":
+                    channelsAllowed = LinkBotChannels.AllowedChannels("normal");
+                    channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
+                    break;
             }
         }
     }
