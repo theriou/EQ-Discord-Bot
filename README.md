@@ -17,6 +17,9 @@ Prefix is what you want to see stuff as such as ! = !spell, Token is where your 
 Requires an AllowedChannels.txt:\
 This file needs 1 channel per line that you would like the bot to Respond to queries with, typing \\#general for example will post the channel ID, or developer discord mode\
 \
+Requires an AllowedChannelsAdmin.txt:\
+This file needs 1 channel per line that you would like the bot to Respond to Reload queries with, this should be in an "Admin" like channel so randoms can't constantly reload files\
+\
 Requires up to the following EQ files based on which you want to enable/do:\
 dbstr_usL.txt - L Live, T Test, B Beta after i.e. dbstr_usL.txt for Live Faction, Overseer Agents, and Overseer Quests\
 spells_usL.txt L Live, T Test, B Beta after i.e. spells_usL.txt for Live Spells\
