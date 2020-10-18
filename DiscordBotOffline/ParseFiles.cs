@@ -56,17 +56,29 @@ namespace DiscordBotOffline
                 }
             }
 
-            var parseLines = File.ReadAllLines(parseFileLoc);
+            bool parseFileExists = File.Exists(parseFileLoc);
 
-            for (int i = 0; i < parseLines.Length; i++)
+            if (parseFileExists)
             {
-                var parseFields = parseLines[i].Split('^');
-                parseName.Add(ulong.Parse(parseFields[0]), parseFields[1]);
+                var parseLines = File.ReadAllLines(parseFileLoc);
+
+                for (int i = 0; i < parseLines.Length; i++)
+                {
+                    var parseFields = parseLines[i].Split('^');
+                    parseName.Add(ulong.Parse(parseFields[0]), parseFields[1]);
+                }
+
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} Count: {parseName.Count()}"); Console.ResetColor();
+
+                return parseName;
             }
+            else
+            {
+                parseName.Add(0, "Null");
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} File Not Found"); Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} Count: {parseName.Count()}"); Console.ResetColor();
-
-            return parseName;
+                return parseName;
+            }
         }
 
         public class PatchJson

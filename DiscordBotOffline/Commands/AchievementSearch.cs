@@ -24,15 +24,15 @@ namespace DiscordBotOffline.Commands
                 bool achieveTest = getAchieveSource.Contains(ctx.Prefix + "achievet"),
                     achieveBeta = getAchieveSource.Contains(ctx.Prefix + "achieveb");
 
-                if (achieveTest == true)
-                {
-                    achieveReturn = GlobalResults.GlobalResult(achieveSearch, "achievet");
-                    achieveDBSource = "Test";
-                }
-                else if (achieveBeta == true)
+                if (achieveBeta == true && Globals.achieveBetaName.Count > 1)
                 {
                     achieveReturn = GlobalResults.GlobalResult(achieveSearch, "achieveb");
                     achieveDBSource = "Beta";
+                }
+                else if (achieveTest == true && Globals.achieveTestName.Count > 1)
+                {
+                    achieveReturn = GlobalResults.GlobalResult(achieveSearch, "achievet");
+                    achieveDBSource = "Test";
                 }
                 else
                 {

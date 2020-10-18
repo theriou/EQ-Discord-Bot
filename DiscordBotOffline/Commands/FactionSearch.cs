@@ -24,15 +24,15 @@ namespace DiscordBotOffline.Commands
                 bool factionTest = getFactionSource.Contains(ctx.Prefix + "factiont"),
                     factionBeta = getFactionSource.Contains(ctx.Prefix + "factionb");
 
-                if (factionTest == true)
-                {
-                    factionReturn = GlobalResults.GlobalResult(factionSearch, "factiont");
-                    factionDBSource = "Test";
-                }
-                else if (factionBeta == true)
+                if (factionBeta == true && Globals.factionBetaName.Count > 1)
                 {
                     factionReturn = GlobalResults.GlobalResult(factionSearch, "factionb");
                     factionDBSource = "Beta";
+                }
+                else if (factionTest == true && Globals.factionTestName.Count > 1)
+                {
+                    factionReturn = GlobalResults.GlobalResult(factionSearch, "factiont");
+                    factionDBSource = "Test";
                 }
                 else
                 {

@@ -31,30 +31,44 @@ namespace DiscordBotOffline
                     break;
             }
 
-            var dbStrLines = File.ReadAllLines(dbStrFileLoc);
+            bool parseFileExists = File.Exists(dbStrFileLoc);
 
-            for (int i = 0; i < dbStrLines.Length; i++)
+            if (parseFileExists)
             {
-                var dbStrFields = dbStrLines[i].Split('^');
+                var dbStrLines = File.ReadAllLines(dbStrFileLoc);
 
-                if (dbStrFields[1] == "45")
+                for (int i = 0; i < dbStrLines.Length; i++)
                 {
-                    factionName.Add(ulong.Parse(dbStrFields[0]), dbStrFields[2]);
+                    var dbStrFields = dbStrLines[i].Split('^');
+
+                    if (dbStrFields[1] == "45")
+                    {
+                        factionName.Add(ulong.Parse(dbStrFields[0]), dbStrFields[2]);
+                    }
+                    if (dbStrFields[1] == "53")
+                    {
+                        overseerAgent.Add(ulong.Parse(dbStrFields[0]), dbStrFields[2]);
+                    }
+                    if (dbStrFields[1] == "56")
+                    {
+                        overseerQuest.Add(ulong.Parse(dbStrFields[0]), dbStrFields[2]);
+                    }
                 }
-                if (dbStrFields[1] == "53")
-                {
-                    overseerAgent.Add(ulong.Parse(dbStrFields[0]), dbStrFields[2]);
-                }
-                if (dbStrFields[1] == "56")
-                {
-                    overseerQuest.Add(ulong.Parse(dbStrFields[0]), dbStrFields[2]);
-                }
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Faction Count: {factionName.Count()}"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Overseer Agent Count: {overseerAgent.Count()}"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Overseer Quest Count: {overseerQuest.Count()}"); Console.ResetColor();
+
+                return new[] { factionName, overseerAgent, overseerQuest };
             }
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Faction Count: {factionName.Count()}"); Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Overseer Agent Count: {overseerAgent.Count()}"); Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Overseer Quest Count: {overseerQuest.Count()}"); Console.ResetColor();
+            else
+            {
+                factionName.Add(0, "Null");
+                overseerAgent.Add(0, "Null");
+                overseerQuest.Add(0, "Null");
 
-            return new[] { factionName, overseerAgent, overseerQuest };
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Faction, Overseer Agent, Overseer Quest File Not Found"); Console.ResetColor();
+                return new[] { factionName, overseerAgent, overseerQuest };
+            }
         }
     }
 }

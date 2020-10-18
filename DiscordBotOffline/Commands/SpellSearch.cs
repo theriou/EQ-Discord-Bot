@@ -24,15 +24,15 @@ namespace DiscordBotOffline.Commands
                 bool spellTest = getSpellSource.Contains(ctx.Prefix + "spellt"),
                     spellBeta = getSpellSource.Contains(ctx.Prefix + "spellb");
 
-                if (spellTest == true)
-                {
-                    spellReturn = GlobalResults.GlobalResult(spellSearch, "spellt");
-                    spellDBSource = "Test";
-                }
-                else if (spellBeta == true)
+                if (spellBeta == true && Globals.spellBetaName.Count > 1)
                 {
                     spellReturn = GlobalResults.GlobalResult(spellSearch, "spellb");
                     spellDBSource = "Beta";
+                }
+                else if (spellTest == true && Globals.spellTestName.Count > 1)
+                {
+                    spellReturn = GlobalResults.GlobalResult(spellSearch, "spellt");
+                    spellDBSource = "Test";
                 }
                 else
                 {
