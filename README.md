@@ -33,4 +33,6 @@ patch.json - json format Patch example:\
 You can use a default Link for Update section such as the EQ Forums News and Announcements `https://forums.daybreakgames.com/eq/index.php?forums/news-and-announcements.2/`
 \
 Note:\
-The Text Files will take a couple of seconds to load before outputting data as they build stuff out, after the initial block of load it should be normal until the Program is re-opend.
+The Text Files will take a couple of seconds to load before outputting data as they build stuff out, after the initial block of load it should be normal until the Program is re-opend.\
+\
+If Beta Files aren't found it will attempt Test Files, if Test Files are also not found it will attempt Live Files, Live Files at minimum are required to Parse things.
