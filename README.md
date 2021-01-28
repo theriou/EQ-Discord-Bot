@@ -22,7 +22,7 @@ Requires up to the following EQ files based on which you want to enable/do:\
 dbstr_usL.txt - L Live, T Test, B Beta after i.e. dbstr_usL.txt for Live Faction, Overseer Agents, and Overseer Quests\
 spells_usL.txt L Live, T Test, B Beta after i.e. spells_usL.txt for Live Spells\
 AchievementsClientL.txt - L Live, T Test, B Beta after i.e. AchievementsClientL.txt for Achievements\
-itemlist.txt - Items, you can get a public list from https://github.com/theriou/EQ-Item-List\
+itemlist.txt - Items, you can get a public list from https://github.com/theriou/EQ-Item-List \
 
 patch.json - json format Patch example:\
 {\
@@ -31,6 +31,13 @@ patch.json - json format Patch example:\
 "link":"`https://eqresource.com\/board\/index.php?topic=208567`"\
 }\
 You can use a default Link for Update section such as the EQ Forums News and Announcements `https://forums.daybreakgames.com/eq/index.php?forums/news-and-announcements.2/`
+\
+Raffle:
+Requires channel ID's to be in AllowedRaffleChannels.txt file for where the raffle is allowed to take place\
+Requires user ID's to be in AllowedRaffleAdmin.txt file these are the members allowed to issue the following commands:\
+raffles: Start Raffle - note this will also delete old entries\
+rafflee: End Raffle - this will end raffle entries and prepare for the Drawing\
+raffler #: Draw Raffle - will accept an int number, can be between 1 and 10, can be rolled unlimited times until a raffles command is done\
 \
 Note:\
 The Text Files will take a couple of seconds to load before outputting data as they build stuff out, after the initial block of load it should be normal until the Program is re-opend.\

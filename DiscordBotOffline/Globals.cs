@@ -6,6 +6,8 @@ namespace DiscordBotOffline
     {
         public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
         public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
+        public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
+        public static ulong[] raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
 
         public static Dictionary<ulong, string> spellLiveName = ParseFiles.ParseFile("spell", "live");
         public static Dictionary<ulong, string>[] dbStrResultsL = MultiParseFiles.ParseDBStrFiles("live");
@@ -178,6 +180,8 @@ namespace DiscordBotOffline
                 case "channel":
                     channelsAllowed = LinkBotChannels.AllowedChannels("normal");
                     channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
+                    raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
+                    raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
                     break;
             }
         }

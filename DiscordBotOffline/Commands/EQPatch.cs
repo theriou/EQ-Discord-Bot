@@ -12,7 +12,7 @@ namespace DiscordBotOffline.Commands
         [Command("patch")]
         public async Task EQRPatch(CommandContext ctx)
         {
-            if (Globals.channelsAllowed.Contains(ctx.Channel.Id))
+            if (Globals.channelsAllowed.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
                 await ctx.TriggerTypingAsync();
 
@@ -20,7 +20,7 @@ namespace DiscordBotOffline.Commands
 
                 string patchReturn = GlobalResults.GlobalResult("", "patch");
 
-                if (string.IsNullOrEmpty(patchReturn) || ctx.Member.IsBot)
+                if (string.IsNullOrEmpty(patchReturn))
                 {
                     Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Patch Failed or a Bot Requested"); Console.ResetColor();
 

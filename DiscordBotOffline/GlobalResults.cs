@@ -34,14 +34,14 @@ namespace DiscordBotOffline
                 {
                     string output = string.Format("{0} Days, {1} Hours, {2} Minutes, {3} Seconds",
                         patchTime.Days, patchTime.Hours, patchTime.Minutes, patchTime.Seconds);
-                    patchOutput = output + " Until Servers Up";
+                    patchOutput = $"{output} Until Servers Up";
                 }
 
                 Console.ForegroundColor = ConsoleColor.Green; Console.Write("Patch: "); Console.ResetColor(); Console.Write(patchDescription + "\n");
                 Console.ForegroundColor = ConsoleColor.Green; Console.Write("Date: "); Console.ResetColor(); Console.Write(patchDate + "\n");
                 Console.ForegroundColor = ConsoleColor.Green; Console.Write("Link: "); Console.ResetColor(); Console.Write(patchLink + "\n");
 
-                string patchReturn = "" + patchDescription + "\n\n" + patchOutput + "\n\n[Update Notes and Changes](" + patchLink + ")\n";
+                string patchReturn = $"{patchDescription}\n\n{patchOutput}\n\n[Update Notes and Changes]({patchLink})\n";
                 patchReturn = Regex.Replace(patchReturn, @"(?<!(?<!\\)\\(?:\\\\)*)(?=[*_`|~])", @"\");
                 return patchReturn;
             }
@@ -67,8 +67,8 @@ namespace DiscordBotOffline
                 {
                     if (listCap <= 9)
                     {
-                        searchReturn += "[" + result.Value + "](" + gotOutputUrl + result.Key + gotSourceType + ")\n";
-                        Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("ID: {0} - Name: {1}", result.Key, result.Value); Console.ResetColor();
+                        searchReturn += $"[{result.Value}]({gotOutputUrl}{result.Key}{gotSourceType})\n";
+                        Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine($"ID: {result.Key} - Name: {result.Value}"); Console.ResetColor();
                         listCap++;
                     }
                     else

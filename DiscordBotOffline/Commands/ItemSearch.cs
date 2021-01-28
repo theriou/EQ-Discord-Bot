@@ -12,39 +12,52 @@ namespace DiscordBotOffline.Commands
         [Command("item")]
         public async Task Spell(CommandContext ctx, [RemainingText]string itemSearch)
         {
-            if (Globals.channelsAllowed.Contains(ctx.Channel.Id))
+            if (Globals.channelsAllowed.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
                 string itemReturn = string.Empty;
 
                 await ctx.TriggerTypingAsync();
 
-                itemReturn = GlobalResults.GlobalResult(itemSearch, "item");
-
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Searched for Item: " + itemSearch); Console.ResetColor();
-
-                if (string.IsNullOrEmpty(itemReturn) || ctx.Member.IsBot)
+                if (string.IsNullOrEmpty(itemSearch))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Item Search Null or Bot"); Console.ResetColor();
-
                     var embed = new DiscordEmbedBuilder
                     {
                         Color = DiscordColor.Gold,
-                        Description = "No Results found. Try something else!"
+                        Description = "Make sure to enter an Item to search for after the command"
                     };
 
                     await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Item Success, Sending Message..."); Console.ResetColor();
+                    itemReturn = GlobalResults.GlobalResult(itemSearch, "item");
 
-                    var embed = new DiscordEmbedBuilder
+                    Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Searched for Item: {itemSearch}"); Console.ResetColor();
+
+                    if (string.IsNullOrEmpty(itemReturn))
                     {
-                        Color = DiscordColor.Gold,
-                        Description = itemReturn
-                    };
+                        Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Item Search Null or Bot"); Console.ResetColor();
 
-                    await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                        var embed = new DiscordEmbedBuilder
+                        {
+                            Color = DiscordColor.Gold,
+                            Description = "No Results found. Try something else!"
+                        };
+
+                        await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Item Success, Sending Message..."); Console.ResetColor();
+
+                        var embed = new DiscordEmbedBuilder
+                        {
+                            Color = DiscordColor.Gold,
+                            Description = itemReturn
+                        };
+
+                        await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    }
                 }
             }
         }

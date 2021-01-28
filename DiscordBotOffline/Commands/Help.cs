@@ -12,7 +12,7 @@ namespace DiscordBotOffline.Commands
         [Command("help")]
         public async Task EQRPatch(CommandContext ctx)
         {
-            if (Globals.channelsAllowed.Contains(ctx.Channel.Id))
+            if (Globals.channelsAllowed.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
                 Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Help Requested, Sending Message"); Console.ResetColor();
 

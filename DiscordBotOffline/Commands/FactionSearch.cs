@@ -12,7 +12,7 @@ namespace DiscordBotOffline.Commands
         [Command("faction"), Aliases("factiont", "factionb")]
         public async Task Spell(CommandContext ctx, [RemainingText]string factionSearch)
         {
-            if (Globals.channelsAllowed.Contains(ctx.Channel.Id))
+            if (Globals.channelsAllowed.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
                 string factionSource = string.Empty,
                     factionReturn = string.Empty,
@@ -20,50 +20,63 @@ namespace DiscordBotOffline.Commands
 
                 await ctx.TriggerTypingAsync();
 
-                string getFactionSource = ctx.Message.ToString();
-                bool factionTest = getFactionSource.Contains(ctx.Prefix + "factiont"),
-                    factionBeta = getFactionSource.Contains(ctx.Prefix + "factionb");
-
-                if (factionBeta == true && Globals.factionBetaName.Count > 1)
+                if (string.IsNullOrEmpty(factionSearch))
                 {
-                    factionReturn = GlobalResults.GlobalResult(factionSearch, "factionb");
-                    factionDBSource = "Beta";
-                }
-                else if (factionTest == true && Globals.factionTestName.Count > 1)
-                {
-                    factionReturn = GlobalResults.GlobalResult(factionSearch, "factiont");
-                    factionDBSource = "Test";
-                }
-                else
-                {
-                    factionReturn = GlobalResults.GlobalResult(factionSearch, "faction");
-                    factionDBSource = "Live";
-                }
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Searched for Faction: " + factionSearch + " Source: " + factionDBSource); Console.ResetColor();
-
-                if (string.IsNullOrEmpty(factionReturn) || ctx.Member.IsBot)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Faction Search Null or Bot"); Console.ResetColor();
-
                     var embed = new DiscordEmbedBuilder
                     {
                         Color = DiscordColor.Gold,
-                        Description = "No Results found. Try something else!"
+                        Description = "Make sure to enter a Faction to search for after the command"
                     };
 
                     await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Faction Success, Sending Message..."); Console.ResetColor();
+                    string getFactionSource = ctx.Message.ToString();
+                    bool factionTest = getFactionSource.Contains(ctx.Prefix + "factiont"),
+                        factionBeta = getFactionSource.Contains(ctx.Prefix + "factionb");
 
-                    var embed = new DiscordEmbedBuilder
+                    if (factionBeta == true && Globals.factionBetaName.Count > 1)
                     {
-                        Color = DiscordColor.Gold,
-                        Description = factionReturn
-                    };
+                        factionReturn = GlobalResults.GlobalResult(factionSearch, "factionb");
+                        factionDBSource = "Beta";
+                    }
+                    else if (factionTest == true && Globals.factionTestName.Count > 1)
+                    {
+                        factionReturn = GlobalResults.GlobalResult(factionSearch, "factiont");
+                        factionDBSource = "Test";
+                    }
+                    else
+                    {
+                        factionReturn = GlobalResults.GlobalResult(factionSearch, "faction");
+                        factionDBSource = "Live";
+                    }
+                    Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Searched for Faction: {factionSearch} Source: {factionDBSource}"); Console.ResetColor();
 
-                    await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    if (string.IsNullOrEmpty(factionReturn))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Faction Search Null or Bot"); Console.ResetColor();
+
+                        var embed = new DiscordEmbedBuilder
+                        {
+                            Color = DiscordColor.Gold,
+                            Description = "No Results found. Try something else!"
+                        };
+
+                        await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Faction Success, Sending Message..."); Console.ResetColor();
+
+                        var embed = new DiscordEmbedBuilder
+                        {
+                            Color = DiscordColor.Gold,
+                            Description = factionReturn
+                        };
+
+                        await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    }
                 }
             }
         }

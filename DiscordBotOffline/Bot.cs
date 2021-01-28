@@ -1,6 +1,7 @@
 ﻿using DiscordBotOffline.Commands;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using Newtonsoft.Json;
 using System;
@@ -61,11 +62,17 @@ namespace DiscordBotOffline
                 Commands.RegisterCommands<Help>();
                 Commands.RegisterCommands<ItemSearch>();
                 //Commands.RegisterCommands<OverseerSearch>();
+                Commands.RegisterCommands<Raffle>();
                 Commands.RegisterCommands<Reload>();
                 Commands.RegisterCommands<SpellSearch>();
                 //Commands.RegisterCommands<TradeSkillSearch>();
 
-                await Client.ConnectAsync();
+                var gamePlaying = new DiscordActivity
+                {
+                    Name = "EverQuest",
+                };
+
+                await Client.ConnectAsync(gamePlaying);
 
                 await Task.Delay(-1);
             }
@@ -77,7 +84,7 @@ namespace DiscordBotOffline
             }
         }
 
-        private Task OnClientReady(ReadyEventArgs e)
+        private Task OnClientReady(object sender, ReadyEventArgs e)
         {
             return Task.CompletedTask;
         }
