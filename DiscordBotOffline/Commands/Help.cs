@@ -20,13 +20,14 @@ namespace DiscordBotOffline.Commands
                 {
                     Color = DiscordColor.Green,
                     Description = "The following Commands are supported (will not respond in these DM's):\n"
-                    + "!patch\n"
-                    + "!item <name>\n"
-                    + "!spell <name> - Can use !spellt for Test, !spellb for Beta\n"
                     + "!achieve <name> - Can use !achievet for Test, !achieveb for Beta\n"
+                    + "!event or !eventu - Lists Current Events or Upcoming Events\n"
                     + "!faction <name> - Can use !factiont for Test, !factionb for Beta\n"
+                    + "!item <name>\n"
                     //+ "!overa <name> Agent Name - can use !overat for Test, !overab for Beta\n"
                     //+ "!overq <name> Quest Name - can use !overqt for Test, !overqb for Beta\n"
+                    + "!patch\n"
+                    + "!spell <name> - Can use !spellt for Test, !spellb for Beta\n"
                     //+ "!ts <name> tradeskill search\n"
                 };
 

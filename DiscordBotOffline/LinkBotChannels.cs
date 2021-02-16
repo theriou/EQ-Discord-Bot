@@ -10,39 +10,44 @@ namespace DiscordBotOffline
         {
             string path = string.Empty,
                 pathType = string.Empty;
-            if (channelType == "normal")
-            {
-                path = @"AllowedChannels.txt";
-            }
-            else
+            string[] dataList;
+            ulong[] channelList;
+
+            if (channelType == "admin")
             {
                 path = @"AllowedChannelsAdmin.txt";
                 pathType = "Admin ";
+            }
+            else
+            {
+                path = @"AllowedChannels.txt";
             }
             bool channelFile = File.Exists(path);
 
             if (channelFile)
             {
-                string[] dataList = File.ReadAllLines(path);
-                ulong[] channelList = dataList.Select(x => ulong.Parse(x)).ToArray();
+                dataList = File.ReadAllLines(path);
+                channelList = dataList.Select(x => ulong.Parse(x)).ToArray();
                 Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Allowed {pathType}Channels: {channelList.Count()}"); Console.ResetColor();
 
-                return channelList;
             }
             else
             {
-                string[] channelFileNotFound = new string[] { "0" };
-                ulong[] channelNotFound = channelFileNotFound.Select(i => ulong.Parse(i)).ToArray();
+                dataList = new string[] { "0" };
+                channelList = dataList.Select(i => ulong.Parse(i)).ToArray();
                 Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine($"Allowed {pathType}Channel File Not Found..."); Console.ResetColor();
 
-                return channelNotFound;
             }
+
+            return channelList;
         }
 
         public static ulong[] AllowedRaffleChannels(string raffleChannelType)
         {
             string raffleType = string.Empty,
                 rafflePath = string.Empty;
+            string[] raffleDataList;
+            ulong[] raffleChannelList;
 
             if (raffleChannelType == "admin")
             {
@@ -59,21 +64,20 @@ namespace DiscordBotOffline
 
             if (raffleFile)
             {
-                string[] raffleDataList = File.ReadAllLines(rafflePath);
-                ulong[] raffleChannelList = raffleDataList.Select(x => ulong.Parse(x)).ToArray();
+                raffleDataList = File.ReadAllLines(rafflePath);
+                raffleChannelList = raffleDataList.Select(x => ulong.Parse(x)).ToArray();
                 Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Allowed Raffle {raffleType}: {raffleChannelList.Count()}"); Console.ResetColor();
 
-                return raffleChannelList;
             }
             else
             {
-                string[] raffleChannelFileNotFound = new string[] { "0" };
-                ulong[] raffleChannelNotFound = raffleChannelFileNotFound.Select(i => ulong.Parse(i)).ToArray();
+                raffleDataList = new string[] { "0" };
+                raffleChannelList = raffleDataList.Select(i => ulong.Parse(i)).ToArray();
                 Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine($"Allowed Raffle {raffleType} File Not Found..."); Console.ResetColor();
 
-                return raffleChannelNotFound;
             }
 
+            return raffleChannelList;
         }
     }
 }

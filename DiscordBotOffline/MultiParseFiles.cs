@@ -9,11 +9,11 @@ namespace DiscordBotOffline
     {
         public static Dictionary<ulong, string>[] ParseDBStrFiles(string multiFileType)
         {
-            Dictionary<ulong, string> factionName = new Dictionary<ulong, string>();
-            Dictionary<ulong, string> overseerAgent = new Dictionary<ulong, string>();
-            Dictionary<ulong, string> overseerQuest = new Dictionary<ulong, string>();
-            string dbStrFileLoc = string.Empty;
-            string dbStrFileSource = string.Empty;
+            Dictionary<ulong, string> factionName = new Dictionary<ulong, string>(), 
+                overseerAgent = new Dictionary<ulong, string>(), 
+                overseerQuest = new Dictionary<ulong, string>();
+            string dbStrFileLoc = string.Empty, 
+                dbStrFileSource = string.Empty;
 
             switch (multiFileType)
             {
@@ -57,8 +57,6 @@ namespace DiscordBotOffline
                 Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Faction Count: {factionName.Count()}"); Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Overseer Agent Count: {overseerAgent.Count()}"); Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Overseer Quest Count: {overseerQuest.Count()}"); Console.ResetColor();
-
-                return new[] { factionName, overseerAgent, overseerQuest };
             }
             else
             {
@@ -67,8 +65,9 @@ namespace DiscordBotOffline
                 overseerQuest.Add(0, "Null");
 
                 Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{dbStrFileSource} Faction, Overseer Agent, Overseer Quest File Not Found"); Console.ResetColor();
-                return new[] { factionName, overseerAgent, overseerQuest };
             }
+
+            return new[] { factionName, overseerAgent, overseerQuest };
         }
     }
 }

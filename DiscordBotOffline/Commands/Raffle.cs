@@ -74,7 +74,7 @@ namespace DiscordBotOffline.Commands
                     }
                     Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine($"Current Total Entries: {raffleList.Count}"); Console.ResetColor();
                 }
-                
+
                 if (!raffleStatus && !raffleDraw)
                 {
                     Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"{ctx.Member.Username} tried to Raffle with none Active"); Console.ResetColor();
@@ -162,6 +162,6 @@ namespace DiscordBotOffline.Commands
 
             }
 
-            }
         }
     }
+}

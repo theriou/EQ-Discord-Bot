@@ -11,8 +11,8 @@ namespace DiscordBotOffline
         public static Dictionary<ulong, string> ParseFile(string fileType, string fileSource)
         {
             Dictionary<ulong, string> parseName = new Dictionary<ulong, string>();
-            string parseFileLoc = string.Empty;
-            string parseFileSource = string.Empty;
+            string parseFileLoc = string.Empty, 
+                parseFileSource = string.Empty;
 
             if (fileType == "achieve")
             {
@@ -70,15 +70,15 @@ namespace DiscordBotOffline
 
                 Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} Count: {parseName.Count()}"); Console.ResetColor();
 
-                return parseName;
             }
             else
             {
                 parseName.Add(0, "Null");
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} File Not Found"); Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} File Not Found..."); Console.ResetColor();
 
-                return parseName;
             }
+
+            return parseName;
         }
 
         public class PatchJson
@@ -90,15 +90,72 @@ namespace DiscordBotOffline
 
         public static string[] ParsePatchFile()
         {
-            PatchJson patchFile = JsonConvert.DeserializeObject<PatchJson>(File.ReadAllText(@"patch.json"));
-            string patchOutput = string.Empty,
-                        patchDescription = patchFile.Patch,
-                        patchDate = patchFile.Date,
-                        patchLink = patchFile.Link;
+            string parsePatchFileLoc = string.Empty;
 
-            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Patch File Loaded"); Console.ResetColor();
+            parsePatchFileLoc = "patch.json";
 
-            return new[] { patchDescription, patchDate, patchLink };
+            bool parsePatchFileExists = File.Exists(parsePatchFileLoc);
+
+            if (parsePatchFileExists)
+            {
+                PatchJson patchFile = JsonConvert.DeserializeObject<PatchJson>(File.ReadAllText(@"patch.json"));
+                string patchOutput = string.Empty,
+                            patchDescription = patchFile.Patch,
+                            patchDate = patchFile.Date,
+                            patchLink = patchFile.Link;
+
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Patch File Loaded"); Console.ResetColor();
+
+                return new[] { patchDescription, patchDate, patchLink };
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Patch File Not Found..."); Console.ResetColor();
+                return null;
+            }
         }
+
+        public class EQREvents
+        {
+            public int EventID { get; set; }
+            public string EventName { get; set; }
+            public DateTime EventStartDate { get; set; }
+            public DateTime EventEndDate { get; set; }
+        }
+
+        public static List<EQREvents> ParseEventFile()
+        {
+            string parseEventFileLoc = string.Empty;
+            List<EQREvents> eqEventData = new List<EQREvents>();
+
+            parseEventFileLoc = "events.txt";
+
+            bool parseEventFileExists = File.Exists(parseEventFileLoc);
+
+            if (parseEventFileExists)
+            {
+                var parseEventLines = File.ReadAllLines(parseEventFileLoc);
+
+                for (int i = 0; i < parseEventLines.Length; i++)
+                {
+                    var parseEventFields = parseEventLines[i].Split('^');
+
+                    eqEventData.Add(new EQREvents() { EventID = Int32.Parse(parseEventFields[0]), EventName = parseEventFields[1],
+                        EventStartDate = DateTime.Parse(parseEventFields[2]), EventEndDate = DateTime.Parse(parseEventFields[3]) });
+                }
+                
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Event Count: {eqEventData.Count()}"); Console.ResetColor();
+
+            }
+            else
+            {
+                eqEventData = null;
+                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("Event File Not Found..."); Console.ResetColor();
+
+            }
+
+            return eqEventData;
+        }
+
     }
 }

@@ -4,10 +4,17 @@ namespace DiscordBotOffline
 {
     class Globals
     {
-        public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
         public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
+        public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
         public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
         public static ulong[] raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
+
+        public static Dictionary<ulong, string> spellBetaName = ParseFiles.ParseFile("spell", "beta");
+        public static Dictionary<ulong, string>[] dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
+        public static Dictionary<ulong, string> factionBetaName = dbStrResultsB[0];
+        public static Dictionary<ulong, string> overseerBetaAgent = dbStrResultsB[1];
+        public static Dictionary<ulong, string> overseerBetaQuest = dbStrResultsB[2];
+        public static Dictionary<ulong, string> achieveBetaName = ParseFiles.ParseFile("achieve", "beta");
 
         public static Dictionary<ulong, string> spellLiveName = ParseFiles.ParseFile("spell", "live");
         public static Dictionary<ulong, string>[] dbStrResultsL = MultiParseFiles.ParseDBStrFiles("live");
@@ -23,15 +30,11 @@ namespace DiscordBotOffline
         public static Dictionary<ulong, string> overseerTestQuest = dbStrResultsT[2];
         public static Dictionary<ulong, string> achieveTestName = ParseFiles.ParseFile("achieve", "test");
 
-        public static Dictionary<ulong, string> spellBetaName = ParseFiles.ParseFile("spell", "beta");
-        public static Dictionary<ulong, string>[] dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
-        public static Dictionary<ulong, string> factionBetaName = dbStrResultsB[0];
-        public static Dictionary<ulong, string> overseerBetaAgent = dbStrResultsB[1];
-        public static Dictionary<ulong, string> overseerBetaQuest = dbStrResultsB[2];
-        public static Dictionary<ulong, string> achieveBetaName = ParseFiles.ParseFile("achieve", "beta");
-
         public static Dictionary<ulong, string> itemName = ParseFiles.ParseFile("item", "");
+
         public static string[] patchData = ParseFiles.ParsePatchFile();
+
+        public static List<ParseFiles.EQREvents> eqrEvent = ParseFiles.ParseEventFile();
 
         public static Dictionary<ulong, string> GetResults(string resultType)
         {
@@ -39,35 +42,35 @@ namespace DiscordBotOffline
 
             switch (resultType)
             {
-                case "spell":
-                    resultOutput = spellLiveName;
-                    break;
-                case "spellt":
-                    resultOutput = spellTestName;
-                    break;
-                case "spellb":
-                    resultOutput = spellBetaName;
-                    break;
-                case "faction":
-                    resultOutput = factionLiveName;
-                    break;
-                case "factiont":
-                    resultOutput = factionTestName;
-                    break;
-                case "factionb":
-                    resultOutput = factionBetaName;
-                    break;
                 case "achieve":
                     resultOutput = achieveLiveName;
-                    break;
-                case "achievet":
-                    resultOutput = achieveTestName;
                     break;
                 case "achieveb":
                     resultOutput = achieveBetaName;
                     break;
+                case "achievet":
+                    resultOutput = achieveTestName;
+                    break;
+                case "faction":
+                    resultOutput = factionLiveName;
+                    break;
+                case "factionb":
+                    resultOutput = factionBetaName;
+                    break;
+                case "factiont":
+                    resultOutput = factionTestName;
+                    break;
                 case "item":
                     resultOutput = itemName;
+                    break;
+                case "spell":
+                    resultOutput = spellLiveName;
+                    break;
+                case "spellb":
+                    resultOutput = spellBetaName;
+                    break;
+                case "spellt":
+                    resultOutput = spellTestName;
                     break;
             }
 
@@ -76,39 +79,38 @@ namespace DiscordBotOffline
 
         public static string[] GetGlobals(string urlType)
         {
-            string sourceType = string.Empty,
-            outputUrl = string.Empty,
-            dbSource = string.Empty;
-            const string dbSourceL = "Live",
-            dbSourceB = "Beta",
-            dbSourceT = "Test";
+            string dbSource = string.Empty,
+                outputUrl = string.Empty,
+                sourceType = string.Empty;
+            const string dbSourceB = "Beta",
+                dbSourceL = "Live",
+                dbSourceT = "Test";
             const string dbUrlSourceB = "&source=beta",
             dbUrlSourceT = "&source=test";
-            const string spellStart = "https://spells.eqresource.com/spells.php?id=",
-            factionStart = "https://factions.eqresource.com/factions.php?id=",
-            achieveStart = "https://achievements.eqresource.com/achievements.php?id=",
-            itemStart = "https://items.eqresource.com/items.php?id=";
+            const string achieveStart = "https://achievements.eqresource.com/achievements.php?id=",
+                eventStart = "https://events.eqresource.com/index.php?action=display_event&oid=",
+                factionStart = "https://factions.eqresource.com/factions.php?id=",
+                itemStart = "https://items.eqresource.com/items.php?id=",
+                spellStart = "https://spells.eqresource.com/spells.php?id=";
 
             switch (urlType)
             {
-                case "item":
-                    outputUrl = itemStart;
-                    break;
-                case "spell":
-                    outputUrl = spellStart;
+                case "achieve":
+                    outputUrl = achieveStart;
                     dbSource = dbSourceL;
                     break;
-                case "spellt":
+                case "achievet":
                     sourceType = dbUrlSourceT;
-                    outputUrl = spellStart;
+                    outputUrl = achieveStart;
                     dbSource = dbSourceT;
                     break;
-                case "spellb":
+                case "achieveb":
                     sourceType = dbUrlSourceB;
-                    outputUrl = spellStart;
+                    outputUrl = achieveStart;
                     dbSource = dbSourceB;
                     break;
-                case "patch":
+                case "event":
+                    outputUrl = eventStart;
                     break;
                 case "faction":
                     outputUrl = factionStart;
@@ -124,18 +126,23 @@ namespace DiscordBotOffline
                     outputUrl = factionStart;
                     dbSource = dbSourceB;
                     break;
-                case "achieve":
-                    outputUrl = achieveStart;
+                case "item":
+                    outputUrl = itemStart;
+                    break;
+                case "patch":
+                    break;
+                case "spell":
+                    outputUrl = spellStart;
                     dbSource = dbSourceL;
                     break;
-                case "achievet":
+                case "spellt":
                     sourceType = dbUrlSourceT;
-                    outputUrl = achieveStart;
+                    outputUrl = spellStart;
                     dbSource = dbSourceT;
                     break;
-                case "achieveb":
+                case "spellb":
                     sourceType = dbUrlSourceB;
-                    outputUrl = achieveStart;
+                    outputUrl = spellStart;
                     dbSource = dbSourceB;
                     break;
             }
@@ -147,12 +154,22 @@ namespace DiscordBotOffline
         {
             switch (reloadType)
             {
-                case "spell":
-                    spellLiveName = ParseFiles.ParseFile("spell", "live");
-                    spellTestName = ParseFiles.ParseFile("spell", "test");
-                    spellBetaName = ParseFiles.ParseFile("spell", "beta");
+                case "achieve":
+                    achieveBetaName = ParseFiles.ParseFile("achieve", "beta");
+                    achieveLiveName = ParseFiles.ParseFile("achieve", "live");
+                    achieveTestName = ParseFiles.ParseFile("achieve", "test");
+                    break;
+                case "channel":
+                    channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
+                    channelsAllowed = LinkBotChannels.AllowedChannels("normal");
+                    raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
+                    raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
                     break;
                 case "dbstr":
+                    dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
+                    factionBetaName = dbStrResultsB[0];
+                    overseerBetaAgent = dbStrResultsB[1];
+                    overseerBetaQuest = dbStrResultsB[2];
                     dbStrResultsL = MultiParseFiles.ParseDBStrFiles("live");
                     factionLiveName = dbStrResultsL[0];
                     overseerLiveAgent = dbStrResultsL[1];
@@ -161,15 +178,9 @@ namespace DiscordBotOffline
                     factionTestName = dbStrResultsT[0];
                     overseerTestAgent = dbStrResultsT[1];
                     overseerTestQuest = dbStrResultsT[2];
-                    dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
-                    factionBetaName = dbStrResultsB[0];
-                    overseerBetaAgent = dbStrResultsB[1];
-                    overseerBetaQuest = dbStrResultsB[2];
                     break;
-                case "achieve":
-                    achieveLiveName = ParseFiles.ParseFile("achieve", "live");
-                    achieveTestName = ParseFiles.ParseFile("achieve", "test");
-                    achieveBetaName = ParseFiles.ParseFile("achieve", "beta");
+                case "events":
+                    eqrEvent = ParseFiles.ParseEventFile();
                     break;
                 case "item":
                     itemName = ParseFiles.ParseFile("item", "");
@@ -177,11 +188,10 @@ namespace DiscordBotOffline
                 case "patch":
                     patchData = ParseFiles.ParsePatchFile();
                     break;
-                case "channel":
-                    channelsAllowed = LinkBotChannels.AllowedChannels("normal");
-                    channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
-                    raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
-                    raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
+                case "spell":
+                    spellBetaName = ParseFiles.ParseFile("spell", "beta");
+                    spellLiveName = ParseFiles.ParseFile("spell", "live");
+                    spellTestName = ParseFiles.ParseFile("spell", "test");
                     break;
             }
         }

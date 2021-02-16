@@ -58,6 +58,7 @@ namespace DiscordBotOffline
 
                 Commands.RegisterCommands<AchievementSearch>();
                 Commands.RegisterCommands<EQPatch>();
+                Commands.RegisterCommands<EQEvent>();
                 Commands.RegisterCommands<FactionSearch>();
                 Commands.RegisterCommands<Help>();
                 Commands.RegisterCommands<ItemSearch>();

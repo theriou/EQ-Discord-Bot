@@ -1,5 +1,5 @@
 # EQ Discord Bot Offline
- EQ Discord Bot that uses Offline files for data instead of pinging Websites\
+ EQ Discord Bot that uses Offline files for Data instead of pinging Websites for Data\
 \
 You can see a working version (when EQRLinkBot is online) in the EQ Resource Discord: `https://discord.gg/AwbHXak`\
 \
@@ -16,13 +16,14 @@ Requires an AllowedChannels.txt:\
 This file needs 1 channel per line that you would like the bot to Respond to queries with, typing \\#general for example will post the channel ID, or developer discord mode\
 \
 Requires an AllowedChannelsAdmin.txt:\
-This file needs 1 channel per line that you would like the bot to Respond to Reload queries with, this should be in an "Admin" like channel so randoms can't constantly reload files\
+This file needs 1 channel per line that you would like the bot to Respond to Reload queries with, this should be in an "Admin" like channel so random users can't constantly reload files\
 \
 Requires up to the following EQ files based on which you want to enable/do:\
 dbstr_usL.txt - L Live, T Test, B Beta after i.e. dbstr_usL.txt for Live Faction, Overseer Agents, and Overseer Quests\
 spells_usL.txt L Live, T Test, B Beta after i.e. spells_usL.txt for Live Spells\
 AchievementsClientL.txt - L Live, T Test, B Beta after i.e. AchievementsClientL.txt for Achievements\
-itemlist.txt - Items, you can get a public list from https://github.com/theriou/EQ-Item-List \
+itemlist.txt - Items, you can get a public list from https://github.com/theriou/EQ-Item-List - this will be updated over time
+events.txt - Events, you can get a public list from https://github.com/theriou/EQEvents - this will be updated over time with current Year of Events
 
 patch.json - json format Patch example:\
 {\
@@ -31,15 +32,15 @@ patch.json - json format Patch example:\
 "link":"`https://eqresource.com\/board\/index.php?topic=208567`"\
 }\
 You can use a default Link for Update section such as the EQ Forums News and Announcements `https://forums.daybreakgames.com/eq/index.php?forums/news-and-announcements.2/`
-\
-Raffle:
+
+Raffle:\
 Requires channel ID's to be in AllowedRaffleChannels.txt file for where the raffle is allowed to take place\
 Requires user ID's to be in AllowedRaffleAdmin.txt file these are the members allowed to issue the following commands:\
-raffles: Start Raffle - note this will also delete old entries\
+raffles: Start Raffle - note this will also delete old entries if a raffle is running\
 rafflee: End Raffle - this will end raffle entries and prepare for the Drawing\
-raffler #: Draw Raffle - will accept an int number, can be between 1 and 10, can be rolled unlimited times until a raffles command is done\
+raffler #: Draw Raffle - will accept an int number, can be between 1 and 10, can be rolled unlimited times until a raffles command is re-entered (to reset raffle) or bot is reloaded\
 \
 Note:\
-The Text Files will take a couple of seconds to load before outputting data as they build stuff out, after the initial block of load it should be normal until the Program is re-opend.\
+The Text Files will take a couple of seconds to load before outputting data as they build stuff out, after the initial block of load it should be normal until the Program is re-opened.\
 \
-If Beta Files aren't found it will attempt Test Files, if Test Files are also not found it will attempt Live Files, Live Files at minimum are required to Parse things.
+If Beta Files aren't found it will attempt Test Files, if Test Files are also not found it will attempt Live Files.

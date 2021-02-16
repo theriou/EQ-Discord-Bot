@@ -20,9 +20,9 @@ namespace DiscordBotOffline.Commands
 
                 string patchReturn = GlobalResults.GlobalResult("", "patch");
 
-                if (string.IsNullOrEmpty(patchReturn))
+                if (Globals.patchData == null)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Patch Failed or a Bot Requested"); Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Patch Failed"); Console.ResetColor();
 
                     var embed = new DiscordEmbedBuilder
                     {
