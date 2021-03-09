@@ -10,40 +10,36 @@ namespace DiscordBotOffline.Commands
     class EQPatch : BaseCommandModule
     {
         [Command("patch")]
-        public async Task EQRPatch(CommandContext ctx)
+        public async Task PatchCommand(CommandContext ctx)
         {
             if (Globals.channelsAllowed.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
+                string patchReturn = string.Empty;
+
                 await ctx.TriggerTypingAsync();
 
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Getting Patch Data"); Console.ResetColor();
-
-                string patchReturn = GlobalResults.GlobalResult("", "patch");
+                Globals.CWLMethod("Patch Data Requested", "Cyan");
 
                 if (Globals.patchData == null)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Patch Failed"); Console.ResetColor();
-
-                    var embed = new DiscordEmbedBuilder
-                    {
-                        Color = DiscordColor.CornflowerBlue,
-                        Description = "Patch Failed! Retry Later."
-                    };
-
-                    await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    Globals.CWLMethod("Patch Failed...", "Red");
+                    patchReturn = "Patch Failed! Retry Later.";
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Patch Success, Sending Message..."); Console.ResetColor();
-
-                    var embed = new DiscordEmbedBuilder
-                    {
-                        Color = DiscordColor.CornflowerBlue,
-                        Description = patchReturn
-                    };
-
-                    await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    Globals.CWLMethod("Patch Success, getting Data...", "Cyan");
+                    patchReturn = GlobalResults.GlobalResult("", "patch");
                 }
+
+                Globals.CWLMethod("Sending Patch Message...", "Cyan");
+
+                var embed = new DiscordEmbedBuilder
+                {
+                    Color = DiscordColor.CornflowerBlue,
+                    Description = patchReturn
+                };
+
+                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
             }
         }
     }

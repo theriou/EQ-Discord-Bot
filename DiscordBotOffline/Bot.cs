@@ -4,7 +4,6 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using Newtonsoft.Json;
-using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +18,14 @@ namespace DiscordBotOffline
         public async Task RunAsync()
         {
             var json = string.Empty;
+            string loadBotFiles = Globals.loadBotFiles;
 
             string jsonConfig = @"config.json";
             bool configExists = File.Exists(jsonConfig);
 
             if (configExists)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("Config File Found"); Console.ResetColor();
+                Globals.CWLMethod("Config File Found", "Yellow");
 
                 using (var fs = File.OpenRead(jsonConfig))
                 using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
@@ -42,7 +42,6 @@ namespace DiscordBotOffline
                 };
 
                 Client = new DiscordClient(config);
-
                 Client.Ready += (OnClientReady);
 
                 var commandsConfig = new CommandsNextConfiguration
@@ -66,7 +65,6 @@ namespace DiscordBotOffline
                 Commands.RegisterCommands<Raffle>();
                 Commands.RegisterCommands<Reload>();
                 Commands.RegisterCommands<SpellSearch>();
-                //Commands.RegisterCommands<TradeSkillSearch>();
 
                 var gamePlaying = new DiscordActivity
                 {
@@ -74,13 +72,11 @@ namespace DiscordBotOffline
                 };
 
                 await Client.ConnectAsync(gamePlaying);
-
                 await Task.Delay(-1);
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Config File was not found..."); Console.ResetColor();
-
+                Globals.CWLMethod("Config File was not found, Bot can't run...", "Red");
                 await Task.Delay(-1);
             }
         }

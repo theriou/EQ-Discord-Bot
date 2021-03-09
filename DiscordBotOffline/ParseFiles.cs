@@ -11,7 +11,7 @@ namespace DiscordBotOffline
         public static Dictionary<ulong, string> ParseFile(string fileType, string fileSource)
         {
             Dictionary<ulong, string> parseName = new Dictionary<ulong, string>();
-            string parseFileLoc = string.Empty, 
+            string parseFileLoc = string.Empty,
                 parseFileSource = string.Empty;
 
             if (fileType == "achieve")
@@ -26,7 +26,7 @@ namespace DiscordBotOffline
                         parseFileLoc = "AchievementsClientB.txt";
                         parseFileSource = "Beta Achievements";
                         break;
-                    default:
+                    case "live":
                         parseFileLoc = "AchievementsClientL.txt";
                         parseFileSource = "Live Achievements";
                         break;
@@ -49,7 +49,7 @@ namespace DiscordBotOffline
                         parseFileLoc = "spells_usB.txt";
                         parseFileSource = "Beta Spells";
                         break;
-                    default:
+                    case "live":
                         parseFileLoc = "spells_usL.txt";
                         parseFileSource = "Live Spells";
                         break;
@@ -68,13 +68,13 @@ namespace DiscordBotOffline
                     parseName.Add(ulong.Parse(parseFields[0]), parseFields[1]);
                 }
 
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} Count: {parseName.Count()}"); Console.ResetColor();
+                Globals.CWLMethod($"{parseFileSource}: {parseName.Count()}", "Magenta");
 
             }
             else
             {
-                parseName.Add(0, "Null");
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"{parseFileSource} File Not Found..."); Console.ResetColor();
+                parseName.Add(0, "");
+                Globals.CWLMethod($"{parseFileSource} File Not Found...", "Red");
 
             }
 
@@ -91,6 +91,7 @@ namespace DiscordBotOffline
         public static string[] ParsePatchFile()
         {
             string parsePatchFileLoc = string.Empty;
+            string[] eqPatchData;
 
             parsePatchFileLoc = "patch.json";
 
@@ -100,22 +101,24 @@ namespace DiscordBotOffline
             {
                 PatchJson patchFile = JsonConvert.DeserializeObject<PatchJson>(File.ReadAllText(@"patch.json"));
                 string patchOutput = string.Empty,
-                            patchDescription = patchFile.Patch,
-                            patchDate = patchFile.Date,
-                            patchLink = patchFile.Link;
+                    patchDescription = patchFile.Patch,
+                    patchDate = patchFile.Date,
+                    patchLink = patchFile.Link;
 
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Patch File Loaded"); Console.ResetColor();
+                Globals.CWLMethod("Patch File Loaded", "Magenta");
 
-                return new[] { patchDescription, patchDate, patchLink };
+                eqPatchData = new[] { patchDescription, patchDate, patchLink };
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Patch File Not Found..."); Console.ResetColor();
-                return null;
+                Globals.CWLMethod("Patch File Not Found...", "Red");
+                eqPatchData = null;
             }
+
+            return eqPatchData;
         }
 
-        public class EQREvents
+        public class EQEvents
         {
             public int EventID { get; set; }
             public string EventName { get; set; }
@@ -123,10 +126,10 @@ namespace DiscordBotOffline
             public DateTime EventEndDate { get; set; }
         }
 
-        public static List<EQREvents> ParseEventFile()
+        public static List<EQEvents> ParseEventFile()
         {
             string parseEventFileLoc = string.Empty;
-            List<EQREvents> eqEventData = new List<EQREvents>();
+            List<EQEvents> eqEventData = new List<EQEvents>();
 
             parseEventFileLoc = "events.txt";
 
@@ -140,18 +143,21 @@ namespace DiscordBotOffline
                 {
                     var parseEventFields = parseEventLines[i].Split('^');
 
-                    eqEventData.Add(new EQREvents() { EventID = Int32.Parse(parseEventFields[0]), EventName = parseEventFields[1],
-                        EventStartDate = DateTime.Parse(parseEventFields[2]), EventEndDate = DateTime.Parse(parseEventFields[3]) });
+                    eqEventData.Add(new EQEvents()
+                    {
+                        EventID = Int32.Parse(parseEventFields[0]),
+                        EventName = parseEventFields[1],
+                        EventStartDate = DateTime.Parse(parseEventFields[2]),
+                        EventEndDate = DateTime.Parse(parseEventFields[3])
+                    });
                 }
-                
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine($"Event Count: {eqEventData.Count()}"); Console.ResetColor();
 
+                Globals.CWLMethod($"Events: {eqEventData.Count()}", "Magenta");
             }
             else
             {
                 eqEventData = null;
-                Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("Event File Not Found..."); Console.ResetColor();
-
+                Globals.CWLMethod("Event File Not Found...", "Red");
             }
 
             return eqEventData;

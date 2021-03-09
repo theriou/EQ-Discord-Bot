@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
 namespace DiscordBotOffline
@@ -28,15 +27,13 @@ namespace DiscordBotOffline
             {
                 dataList = File.ReadAllLines(path);
                 channelList = dataList.Select(x => ulong.Parse(x)).ToArray();
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Allowed {pathType}Channels: {channelList.Count()}"); Console.ResetColor();
-
+                Globals.CWLMethod($"Allowed {pathType}Channels: {channelList.Count()}", "Yellow");
             }
             else
             {
                 dataList = new string[] { "0" };
-                channelList = dataList.Select(i => ulong.Parse(i)).ToArray();
-                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine($"Allowed {pathType}Channel File Not Found..."); Console.ResetColor();
-
+                channelList = dataList.Select(x => ulong.Parse(x)).ToArray();
+                Globals.CWLMethod($"Allowed {pathType}Channel File Not Found...", "Red");
             }
 
             return channelList;
@@ -66,15 +63,13 @@ namespace DiscordBotOffline
             {
                 raffleDataList = File.ReadAllLines(rafflePath);
                 raffleChannelList = raffleDataList.Select(x => ulong.Parse(x)).ToArray();
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Allowed Raffle {raffleType}: {raffleChannelList.Count()}"); Console.ResetColor();
-
+                Globals.CWLMethod($"Allowed Raffle {raffleType}: {raffleChannelList.Count()}", "Yellow");
             }
             else
             {
                 raffleDataList = new string[] { "0" };
-                raffleChannelList = raffleDataList.Select(i => ulong.Parse(i)).ToArray();
-                Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine($"Allowed Raffle {raffleType} File Not Found..."); Console.ResetColor();
-
+                raffleChannelList = raffleDataList.Select(x => ulong.Parse(x)).ToArray();
+                Globals.CWLMethod($"Allowed Raffle {raffleType} File Not Found...", "Red");
             }
 
             return raffleChannelList;

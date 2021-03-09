@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DiscordBotOffline
 {
     class Globals
     {
+        public static string loadBotFiles = string.Empty;
         public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
         public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
         public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
@@ -34,7 +36,7 @@ namespace DiscordBotOffline
 
         public static string[] patchData = ParseFiles.ParsePatchFile();
 
-        public static List<ParseFiles.EQREvents> eqrEvent = ParseFiles.ParseEventFile();
+        public static List<ParseFiles.EQEvents> eqEvent = ParseFiles.ParseEventFile();
 
         public static Dictionary<ulong, string> GetResults(string resultType)
         {
@@ -84,10 +86,10 @@ namespace DiscordBotOffline
                 sourceType = string.Empty;
             const string dbSourceB = "Beta",
                 dbSourceL = "Live",
-                dbSourceT = "Test";
-            const string dbUrlSourceB = "&source=beta",
-            dbUrlSourceT = "&source=test";
-            const string achieveStart = "https://achievements.eqresource.com/achievements.php?id=",
+                dbSourceT = "Test",
+                dbUrlSourceB = "&source=beta",
+                dbUrlSourceT = "&source=test",
+                achieveStart = "https://achievements.eqresource.com/achievements.php?id=",
                 eventStart = "https://events.eqresource.com/index.php?action=display_event&oid=",
                 factionStart = "https://factions.eqresource.com/factions.php?id=",
                 itemStart = "https://items.eqresource.com/items.php?id=",
@@ -180,7 +182,7 @@ namespace DiscordBotOffline
                     overseerTestQuest = dbStrResultsT[2];
                     break;
                 case "events":
-                    eqrEvent = ParseFiles.ParseEventFile();
+                    eqEvent = ParseFiles.ParseEventFile();
                     break;
                 case "item":
                     itemName = ParseFiles.ParseFile("item", "");
@@ -194,6 +196,11 @@ namespace DiscordBotOffline
                     spellTestName = ParseFiles.ParseFile("spell", "test");
                     break;
             }
+        }
+
+        public static void CWLMethod(string cwlText, string cwlColor)
+        {
+            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), cwlColor); Console.WriteLine(cwlText); Console.ResetColor();
         }
     }
 }

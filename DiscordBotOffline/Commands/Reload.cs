@@ -9,64 +9,64 @@ namespace DiscordBotOffline.Commands
 {
     class Reload : BaseCommandModule
     {
-        [Command("reloada"), Aliases("reloadc", "reloadd", "reloade", "reloadi", "reloadp", "reloads")]
-        public async Task EQRPatch(CommandContext ctx)
+        [Command("reload")]
+        public async Task ReloadCommand(CommandContext ctx, [RemainingText]string reloadType)
         {
             if (Globals.channelsAllowedAdmin.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Attempting to Reload"); Console.ResetColor();
+                Globals.CWLMethod("Attempting to Reload", "Cyan");
 
-                string getReloadType = ctx.Message.ToString(),
-                    reloadSection = string.Empty;
-                bool reloadAchieve = getReloadType.Contains(ctx.Prefix + "reloada"),
-                    reloadChannels = getReloadType.Contains(ctx.Prefix + "reloadc"),
-                    reloadDbStr = getReloadType.Contains(ctx.Prefix + "reloadd"),
-                    reloadEvents = getReloadType.Contains(ctx.Prefix + "reloade"),
-                    reloadItems = getReloadType.Contains(ctx.Prefix + "reloadi"),
-                    reloadPatch = getReloadType.Contains(ctx.Prefix + "reloadp"),
-                    reloadSpells = getReloadType.Contains(ctx.Prefix + "reloads");
+                string reloadSection = string.Empty;
 
                 await ctx.TriggerTypingAsync();
 
-                if (reloadAchieve == true)
+                Globals.CWLMethod("Reload Command Used", "Cyan");
+
+                switch (reloadType.ToLower())
                 {
-                    Globals.ReloadValues("achieve");
-                    reloadSection = "Achievement";
-                }
-                else if (reloadChannels == true)
-                {
-                    Globals.ReloadValues("channel");
-                    reloadSection = "Channel";
-                }
-                else if (reloadDbStr == true)
-                {
-                    Globals.ReloadValues("dbstr");
-                    reloadSection = "Faction and Overseer";
-                }
-                else if (reloadEvents == true)
-                {
-                    Globals.ReloadValues("events");
-                    reloadSection = "Event";
-                }
-                else if (reloadItems == true)
-                {
-                    Globals.ReloadValues("item");
-                    reloadSection = "Item";
-                }
-                else if (reloadPatch == true)
-                {
-                    Globals.ReloadValues("patch");
-                    reloadSection = "Patch";
-                }
-                else if (reloadSpells == true)
-                {
-                    Globals.ReloadValues("spell");
-                    reloadSection = "Spell";
+                    case "achieve":
+                        Globals.ReloadValues("achieve");
+                        reloadSection = "Achievement";
+                        break;
+                    case "channel":
+                        Globals.ReloadValues("channel");
+                        reloadSection = "Channel";
+                        break;
+                    case "dbstr":
+                        Globals.ReloadValues("dbstr");
+                        reloadSection = "Faction and Overseer";
+                        break;
+                    case "event":
+                        Globals.ReloadValues("events");
+                        reloadSection = "Event";
+                        break;
+                    case "item":
+                        Globals.ReloadValues("item");
+                        reloadSection = "Item";
+                        break;
+                    case "patch":
+                        Globals.ReloadValues("patch");
+                        reloadSection = "Patch";
+                        break;
+                    case "spell":
+                        Globals.ReloadValues("spell");
+                        reloadSection = "Spell";
+                        break;
+                    case "all":
+                        Globals.ReloadValues("achieve");
+                        Globals.ReloadValues("channel");
+                        Globals.ReloadValues("dbstr");
+                        Globals.ReloadValues("events");
+                        Globals.ReloadValues("item");
+                        Globals.ReloadValues("patch");
+                        Globals.ReloadValues("spell");
+                        reloadSection = "All File";
+                        break;
                 }
 
                 reloadSection += " Reload should be Completed!";
 
-                Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine(reloadSection); Console.ResetColor();
+                Globals.CWLMethod(reloadSection, "Cyan");
 
                 var embed = new DiscordEmbedBuilder
                 {

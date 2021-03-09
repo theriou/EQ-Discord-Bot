@@ -10,29 +10,25 @@ namespace DiscordBotOffline.Commands
     class SpellSearch : BaseCommandModule
     {
         [Command("spell"), Aliases("spellt", "spellb")]
-        public async Task Spell(CommandContext ctx, [RemainingText]string spellSearch)
+        public async Task SpellCommand(CommandContext ctx, [RemainingText]string spellSearch)
         {
             if (Globals.channelsAllowed.Contains(ctx.Channel.Id) && !ctx.Member.IsBot)
             {
-                string spellSource = string.Empty,
-                    spellReturn = string.Empty,
-                    spellDBSource = string.Empty;
+                string spellReturn = string.Empty;
 
                 await ctx.TriggerTypingAsync();
 
+                Globals.CWLMethod("Spell Data Requested", "Cyan");
+
                 if (string.IsNullOrEmpty(spellSearch))
                 {
-                    var embed = new DiscordEmbedBuilder
-                    {
-                        Color = DiscordColor.Gold,
-                        Description = "Make sure to enter a Spell to search for after the command"
-                    };
-
-                    await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    Globals.CWLMethod("Spell Searched without Name", "Red");
+                    spellReturn = "Make sure to enter a Spell to search for after the command";
                 }
                 else
                 {
-                    string getSpellSource = ctx.Message.ToString();
+                    string getSpellSource = ctx.Message.ToString(),
+                        spellDBSource = string.Empty;
                     bool spellTest = getSpellSource.Contains(ctx.Prefix + "spellt"),
                         spellBeta = getSpellSource.Contains(ctx.Prefix + "spellb");
 
@@ -51,33 +47,19 @@ namespace DiscordBotOffline.Commands
                         spellReturn = GlobalResults.GlobalResult(spellSearch, "spell");
                         spellDBSource = "Live";
                     }
-                    Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine($"Searched for Spell: {spellSearch} Source: {spellDBSource}"); Console.ResetColor();
 
-                    if (string.IsNullOrEmpty(spellReturn))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Spell Search Null or Bot"); Console.ResetColor();
-
-                        var embed = new DiscordEmbedBuilder
-                        {
-                            Color = DiscordColor.Gold,
-                            Description = "No Results found. Try something else!"
-                        };
-
-                        await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine("Spell Success, Sending Message..."); Console.ResetColor();
-
-                        var embed = new DiscordEmbedBuilder
-                        {
-                            Color = DiscordColor.Gold,
-                            Description = spellReturn
-                        };
-
-                        await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
-                    }
+                    Globals.CWLMethod($"Searched for Spell: {spellSearch} Source: {spellDBSource}", "Cyan");
                 }
+
+                Globals.CWLMethod("Sending Spell Message...", "Cyan");
+
+                var embed = new DiscordEmbedBuilder
+                {
+                    Color = DiscordColor.Gold,
+                    Description = spellReturn
+                };
+
+                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
             }
         }
     }
