@@ -42,19 +42,19 @@ namespace DiscordBotOffline
 
                 if (nameSearch == "upcoming")
                 {
-                    dataReturn = "Upcoming Events:\n\n";
-                    eventDataReturn = Globals.eqEvent.Where(x => x.EventStartDate >= DateTime.Now && x.EventStartDate <= DateTime.Now.AddDays(7)).Take(10);
+                    dataReturn = "Upcoming Events:\n";
+                    eventDataReturn = Globals.eqEvent.Where(x => x.EventStartDate >= DateTime.Now && x.EventStartDate <= DateTime.Now.AddDays(30)).Take(10);
                 }
                 else
                 {
-                    dataReturn = "Active Events:\n\n";
+                    dataReturn = "Active Events:\n";
                     eventDataReturn = Globals.eqEvent.Where(x => x.EventStartDate <= DateTime.Now && x.EventEndDate >= DateTime.Now).Take(10);
                 }
 
                 if (eventDataReturn.Any() == false)
                 {
                     Globals.CWLMethod("No Events Now or Soon", "Red");
-                    dataReturn += (nameSearch == "upcoming") ? "No Events begin in the next 7 Days." : "No Events are Currently Active.";
+                    dataReturn += (nameSearch == "upcoming") ? "\nNo Events begin in the next 30 Days." : "\nNo Events are Currently Active.";
                 }
                 else
                 {
@@ -62,7 +62,7 @@ namespace DiscordBotOffline
                     {
                         TimeSpan eventTimer = (nameSearch == "upcoming") ? data.EventStartDate - DateTime.Now : data.EventEndDate - DateTime.Now;
                         Globals.CWLMethod($"{data.EventID} + {data.EventName}", "Green");
-                        dataReturn += $"[{data.EventName}]({gotOutputUrl}{data.EventID}) - {eventBeginEnd} in {TimeLeft(eventTimer)}";
+                        dataReturn += $"\n[{data.EventName}]({gotOutputUrl}{data.EventID}) - {eventBeginEnd} in {TimeLeft(eventTimer)}";
                     }
                 }
             }
