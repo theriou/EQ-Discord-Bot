@@ -1,11 +1,11 @@
-# EQ Discord Bot Offline
- EQ Discord Bot that uses Offline files for Data instead of pinging Websites for Data\
+# EQ Discord Bot
+EQ Discord Bot that uses Offline files for Data instead of having to ping Websites for Data\
 \
 You can see a working version (when EQRLinkBot is online) in the EQ Resource Discord: `https://discord.gg/AwbHXak`\
 \
 Requires a Discord Bot set up to your discord server, recommended to google this set up process\
 \
-All files need to be placed in the base programs directory\
+Files should be in a config folder for Allowed Channels, Config file, or the Server Emoji/Json/Role stuff, the actual data files will be in a data folder\
 \
 Requires a config.json file with the following format:\
 {\
@@ -19,7 +19,7 @@ This file needs 1 channel per line that you would like the bot to Respond to que
 \
 Requires an AllowedChannelsAdmin.txt:\
 This file needs 1 channel per line that you would like the bot to Respond to Reload queries with, this should be in an "Admin" like channel so random users can't constantly reload files on you\
-The reload command currently accepts: achieve, channel, dbstr (faction + overseer), event, item, patch, spell, all (everything in the list)\
+The reload command currently accepts: achieve, channel, dbstr (faction + overseer), event, item, patch, role, spell, all (everything in the list)\
 \
 Requires up to the following EQ files based on which you want to enable/do:\
 dbstr_usL.txt - L Live, T Test, B Beta after i.e. dbstr_usL.txt for Live Faction, Overseer Agents, and Overseer Quests\
@@ -28,11 +28,17 @@ AchievementsClientL.txt - L Live, T Test, B Beta after i.e. AchievementsClientL.
 itemlist.txt - Items, you can get a public list from https://github.com/theriou/EQ-Item-List - this will be updated over time\
 events.txt - Events, you can get a public list from https://github.com/theriou/EQEvents - this will be updated over time with current Year of Events\
 \
+AllowedRoleMessages.txt - this contains the message id's that the bot will look for reactions with\
+ServerChannelId.txt - this specifies a channel to output when servers go from locked/down to not locked/down or vice versa\
+ServerJSON.txt - this contains the json data needed to parse - plus the member group to @ on changes, in the form of ServerType^Name^MemberGroup\
+ServerRoles.txt - this contains the emoji name to look for plus the membergroup to add or remove from when clicked, in the form of EmojiName^MemberGroup\
+\
 patch.json - json format Patch example:\
 {\
-"patch":"All EverQuest Live Servers will be brought offline on Wednesday, September 16, 2020 at 6:00 AM PT* for an update. Downtime is expected to last approximately 7 hours.",\
-"date":"2020-09-16T13:00:00.0000000-07:00",\
-"link":"`https://eqresource.com\/board\/index.php?topic=208567`"\
+"patch": "All EverQuest Live Servers will be brought offline on Wednesday, March 9, 2022 at 6:00 AM PT* for an update. Downtime is expected to last approximately 8 hours.",\
+"startdate": "2022-03-09T06:00:00.0000000-07:00",\
+"enddate": "2022-03-09T14:00:00.0000000-07:00",\
+"link": "https:\/\/eqresource.com\/board\/index.php?topic=218544"\
 }\
 You can use a default Link for Update section such as the EQ Forums News and Announcements `https://forums.daybreakgames.com/eq/index.php?forums/news-and-announcements.2/` in place of the EQResource link\
 \
