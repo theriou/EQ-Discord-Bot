@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class FactionSearch : BaseCommandModule
     {
@@ -29,8 +29,8 @@ namespace DiscordBotOffline.Commands
                 {
                     string getFactionSource = ctx.Message.ToString(),
                         factionDBSource = string.Empty;
-                    bool factionTest = getFactionSource.Contains(ctx.Prefix + "factiont"),
-                        factionBeta = getFactionSource.Contains(ctx.Prefix + "factionb");
+                    bool factionTest = getFactionSource.IndexOf(ctx.Prefix + "factiont", 0, StringComparison.CurrentCultureIgnoreCase) >= 0,
+                        factionBeta = getFactionSource.IndexOf(ctx.Prefix + "factionb", 0, StringComparison.CurrentCultureIgnoreCase) >= 0;
 
                     if (factionBeta == true && Globals.factionBetaName.Count > 1)
                     {
@@ -59,7 +59,7 @@ namespace DiscordBotOffline.Commands
                     Description = factionReturn
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync(embed: embed);
             }
         }
     }

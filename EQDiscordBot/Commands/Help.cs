@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class Help : BaseCommandModule
     {
@@ -29,7 +29,7 @@ namespace DiscordBotOffline.Commands
                     + "!spell <name> - Can use !spellt for Test, !spellb for Beta\n"
                 };
 
-                await ctx.Member.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                await ctx.Member.SendMessageAsync(embed: embed);
             }
         }
     }

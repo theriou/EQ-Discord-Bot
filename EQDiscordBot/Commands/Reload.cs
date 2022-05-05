@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class Reload : BaseCommandModule
     {
@@ -17,10 +17,13 @@ namespace DiscordBotOffline.Commands
                 Globals.CWLMethod("Attempting to Reload", "Cyan");
 
                 string reloadSection = string.Empty;
+                bool defaultReply = false;
 
                 await ctx.TriggerTypingAsync();
 
                 Globals.CWLMethod("Reload Command Used", "Cyan");
+
+                reloadType = (String.IsNullOrEmpty(reloadType)) ? "unknown" : reloadType;
 
                 switch (reloadType.ToLower())
                 {
@@ -37,7 +40,7 @@ namespace DiscordBotOffline.Commands
                         reloadSection = "Faction and Overseer";
                         break;
                     case "event":
-                        Globals.ReloadValues("events");
+                        Globals.ReloadValues("event");
                         reloadSection = "Event";
                         break;
                     case "item":
@@ -47,6 +50,10 @@ namespace DiscordBotOffline.Commands
                     case "patch":
                         Globals.ReloadValues("patch");
                         reloadSection = "Patch";
+                        break;
+                    case "role":
+                        Globals.ReloadValues("role");
+                        reloadSection = "Role and Server Status";
                         break;
                     case "spell":
                         Globals.ReloadValues("spell");
@@ -59,12 +66,17 @@ namespace DiscordBotOffline.Commands
                         Globals.ReloadValues("events");
                         Globals.ReloadValues("item");
                         Globals.ReloadValues("patch");
+                        Globals.ReloadValues("role");
                         Globals.ReloadValues("spell");
                         reloadSection = "All File";
                         break;
+                    default:
+                        reloadSection = "A Type of Reload must be Specified after the command: achieve, channel, dbstr, event, item, patch, role, spell or all";
+                        defaultReply = true;
+                        break;
                 }
 
-                reloadSection += " Reload should be Completed!";
+                reloadSection += (defaultReply == true) ? "" : " Reload should be Completed!";
 
                 Globals.CWLMethod(reloadSection, "Cyan");
 
@@ -74,7 +86,7 @@ namespace DiscordBotOffline.Commands
                     Description = reloadSection
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync(embed: embed);
             }
         }
     }

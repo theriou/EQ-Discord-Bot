@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
     class LinkBotChannels
     {
@@ -14,16 +14,15 @@ namespace DiscordBotOffline
 
             if (channelType == "admin")
             {
-                path = @"AllowedChannelsAdmin.txt";
+                path = @"config/AllowedChannelsAdmin.txt";
                 pathType = "Admin ";
             }
             else
             {
-                path = @"AllowedChannels.txt";
+                path = @"config/AllowedChannels.txt";
             }
-            bool channelFile = File.Exists(path);
 
-            if (channelFile)
+            if (File.Exists(path))
             {
                 dataList = File.ReadAllLines(path);
                 channelList = dataList.Select(x => ulong.Parse(x)).ToArray();
@@ -48,18 +47,16 @@ namespace DiscordBotOffline
 
             if (raffleChannelType == "admin")
             {
-                rafflePath = @"AllowedRaffleAdmin.txt";
+                rafflePath = @"config/AllowedRaffleAdmin.txt";
                 raffleType = "Admins";
             }
             else
             {
-                rafflePath = @"AllowedRaffleChannels.txt";
+                rafflePath = @"config/AllowedRaffleChannels.txt";
                 raffleType = "Channels";
             }
 
-            bool raffleFile = File.Exists(rafflePath);
-
-            if (raffleFile)
+            if (File.Exists(rafflePath))
             {
                 raffleDataList = File.ReadAllLines(rafflePath);
                 raffleChannelList = raffleDataList.Select(x => ulong.Parse(x)).ToArray();
@@ -73,6 +70,51 @@ namespace DiscordBotOffline
             }
 
             return raffleChannelList;
+        }
+
+        public static ulong[] AllowedRoleMessages(string roles)
+        {
+            string path = string.Empty;
+            string[] roleDataList;
+            ulong[] messageList;
+
+            path = @"config/AllowedRoleMessages.txt";
+
+            if (File.Exists(path))
+            {
+                roleDataList = File.ReadAllLines(path);
+                messageList = roleDataList.Select(x => ulong.Parse(x)).ToArray();
+                Globals.CWLMethod($"Allowed Server Role Messages: {messageList.Count()}", "Yellow");
+            }
+            else
+            {
+                roleDataList = new string[] { "0" };
+                messageList = roleDataList.Select(x => ulong.Parse(x)).ToArray();
+                Globals.CWLMethod($"Allowed Server Role Messages File Not Found...", "Red");
+            }
+
+            return messageList;
+        }
+
+        public static ulong MessageChannelID(string roleMessageType)
+        {
+            string messagePath = string.Empty;
+            ulong messageDataList;
+
+            messagePath = @"config/ServerChannelId.txt";
+
+            if (File.Exists(messagePath))
+            {
+                messageDataList = ulong.Parse(File.ReadLines(messagePath).First());
+                Globals.CWLMethod($"Channel ID: {messageDataList}", "Yellow");
+            }
+            else
+            {
+                messageDataList = 0;
+                Globals.CWLMethod($"Channel ID Message File Not Found...", "Red");
+            }
+
+            return messageDataList;
         }
     }
 }

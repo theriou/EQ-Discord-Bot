@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
     class MultiParseFiles
     {
@@ -17,22 +17,20 @@ namespace DiscordBotOffline
             switch (multiFileType)
             {
                 case "test":
-                    dbStrFileLoc = "dbstr_usT.txt";
+                    dbStrFileLoc = "data/dbstr_usT.txt";
                     dbStrFileSource = "Test";
                     break;
                 case "beta":
-                    dbStrFileLoc = "dbstr_usB.txt";
+                    dbStrFileLoc = "data/dbstr_usB.txt";
                     dbStrFileSource = "Beta";
                     break;
                 case "live":
-                    dbStrFileLoc = "dbstr_usL.txt";
+                    dbStrFileLoc = "data/dbstr_usL.txt";
                     dbStrFileSource = "Live";
                     break;
             }
 
-            bool parseFileExists = File.Exists(dbStrFileLoc);
-
-            if (parseFileExists)
+            if (File.Exists(dbStrFileLoc))
             {
                 var dbStrLines = File.ReadAllLines(dbStrFileLoc);
 

@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
     class ParseFiles
     {
@@ -19,22 +20,22 @@ namespace DiscordBotOffline
                 switch (fileSource)
                 {
                     case "test":
-                        parseFileLoc = "AchievementsClientT.txt";
+                        parseFileLoc = "data/AchievementsClientT.txt";
                         parseFileSource = "Test Achievements";
                         break;
                     case "beta":
-                        parseFileLoc = "AchievementsClientB.txt";
+                        parseFileLoc = "data/AchievementsClientB.txt";
                         parseFileSource = "Beta Achievements";
                         break;
                     case "live":
-                        parseFileLoc = "AchievementsClientL.txt";
+                        parseFileLoc = "data/AchievementsClientL.txt";
                         parseFileSource = "Live Achievements";
                         break;
                 }
             }
             if (fileType == "item")
             {
-                parseFileLoc = "itemlist.txt";
+                parseFileLoc = "data/itemlist.txt";
                 parseFileSource = "Items";
             }
             if (fileType == "spell")
@@ -42,23 +43,21 @@ namespace DiscordBotOffline
                 switch (fileSource)
                 {
                     case "test":
-                        parseFileLoc = "spells_usT.txt";
+                        parseFileLoc = "data/spells_usT.txt";
                         parseFileSource = "Test Spells";
                         break;
                     case "beta":
-                        parseFileLoc = "spells_usB.txt";
+                        parseFileLoc = "data/spells_usB.txt";
                         parseFileSource = "Beta Spells";
                         break;
                     case "live":
-                        parseFileLoc = "spells_usL.txt";
+                        parseFileLoc = "data/spells_usL.txt";
                         parseFileSource = "Live Spells";
                         break;
                 }
             }
 
-            bool parseFileExists = File.Exists(parseFileLoc);
-
-            if (parseFileExists)
+            if (File.Exists(parseFileLoc))
             {
                 var parseLines = File.ReadAllLines(parseFileLoc);
 
@@ -81,33 +80,20 @@ namespace DiscordBotOffline
             return parseName;
         }
 
-        public class PatchJson
-        {
-            public string Patch { get; set; }
-            public string Date { get; set; }
-            public string Link { get; set; }
-        }
-
         public static string[] ParsePatchFile()
         {
             string parsePatchFileLoc = string.Empty;
             string[] eqPatchData;
 
-            parsePatchFileLoc = "patch.json";
+            parsePatchFileLoc = "data/patch.json";
 
-            bool parsePatchFileExists = File.Exists(parsePatchFileLoc);
-
-            if (parsePatchFileExists)
+            if (File.Exists(parsePatchFileLoc))
             {
-                PatchJson patchFile = JsonConvert.DeserializeObject<PatchJson>(File.ReadAllText(@"patch.json"));
-                string patchOutput = string.Empty,
-                    patchDescription = patchFile.Patch,
-                    patchDate = patchFile.Date,
-                    patchLink = patchFile.Link;
+                JObject patchFile = JObject.Parse(File.ReadAllText(parsePatchFileLoc));
 
                 Globals.CWLMethod("Patch File Loaded", "Magenta");
 
-                eqPatchData = new[] { patchDescription, patchDate, patchLink };
+                eqPatchData = new[] { patchFile["patch"].ToString(), patchFile["startdate"].ToString(), patchFile["enddate"].ToString(), patchFile["link"].ToString() };
             }
             else
             {
@@ -131,11 +117,9 @@ namespace DiscordBotOffline
             string parseEventFileLoc = string.Empty;
             List<EQEvents> eqEventData = new List<EQEvents>();
 
-            parseEventFileLoc = "events.txt";
+            parseEventFileLoc = "data/events.txt";
 
-            bool parseEventFileExists = File.Exists(parseEventFileLoc);
-
-            if (parseEventFileExists)
+            if (File.Exists(parseEventFileLoc))
             {
                 var parseEventLines = File.ReadAllLines(parseEventFileLoc);
 
@@ -161,6 +145,98 @@ namespace DiscordBotOffline
             }
 
             return eqEventData;
+        }
+
+        public static Dictionary<string, ulong> ParseRolesFile()
+        {
+            Dictionary<string, ulong> rolesName = new Dictionary<string, ulong>();
+            string roleFileLoc = string.Empty;
+
+            roleFileLoc = "config/ServerRoles.txt";
+
+            if (File.Exists(roleFileLoc))
+            {
+                var roleLines = File.ReadAllLines(roleFileLoc);
+
+                for (int i = 0; i < roleLines.Length; i++)
+                {
+                    var roleFields = roleLines[i].Split('^');
+                    rolesName.Add(roleFields[0], ulong.Parse(roleFields[1]));
+                }
+
+                Globals.CWLMethod($"{rolesName.Count()} Roles Found", "Yellow");
+            }
+            else
+            {
+                rolesName.Add("", 0);
+                Globals.CWLMethod($"Roles File Not Found...", "Red");
+            }
+
+            return rolesName;
+        }
+
+        public class ServersAndRoles
+        {
+            public string ServerRegion { get; set; }
+            public string ServerName { get; set; }
+            public ulong RolesID { get; set; }
+            public string ServerStatus { get; set; }
+        }
+
+        private static HttpClient StatusClients = new HttpClient();
+
+
+        public static List<ServersAndRoles> ParseServerRoleFile()
+        {
+            List<ServersAndRoles> serverRoles = new List<ServersAndRoles>();
+            string serverRoleFileLoc = string.Empty;
+
+            serverRoleFileLoc = "config/ServerJSON.txt";
+
+            if (File.Exists(serverRoleFileLoc))
+            {
+                var roleLines = File.ReadAllLines(serverRoleFileLoc);
+
+                for (int i = 0; i < roleLines.Length; i++)
+                {
+                    var serverRoleFields = roleLines[i].Split('^');
+                    serverRoles.Add(new ServersAndRoles() { ServerRegion = serverRoleFields[0], ServerName = serverRoleFields[1], RolesID = ulong.Parse(serverRoleFields[2]) });
+                }
+
+                Globals.CWLMethod($"{serverRoles.Count()} Servers And Roles Found, Parsing Initial Status", "Yellow");
+
+                try
+                {
+                    var eqResults = StatusClients.GetStringAsync("https://census.daybreakgames.com/json/status/eq").Result;
+
+                    if (string.IsNullOrEmpty(eqResults) && (!eqResults.StartsWith("{") && !eqResults.EndsWith("}")))
+                    {
+                    }
+                    else
+                    {
+                        JObject eqStatusResult = JObject.Parse(eqResults);
+
+                        foreach (var statusResults in serverRoles)
+                        {
+                            statusResults.ServerStatus = eqStatusResult["eq"][statusResults.ServerRegion][statusResults.ServerName]["status"].ToString();
+                        }
+
+                        Globals.CWLMethod($"Server Status Values Initiated", "Yellow");
+                    }
+                }
+                catch
+                {
+                    Globals.CWLMethod($"Server Status Values Failed to Initiate", "Red");
+                }
+
+            }
+            else
+            {
+                serverRoles.Add(new ServersAndRoles() { ServerRegion = null, ServerName = null, RolesID = 0 });
+                Globals.CWLMethod($"Servers And Roles File Not Found...", "Red");
+            }
+
+            return serverRoles;
         }
 
     }

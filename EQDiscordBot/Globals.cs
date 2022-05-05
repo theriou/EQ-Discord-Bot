@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
     class Globals
     {
@@ -10,6 +10,8 @@ namespace DiscordBotOffline
         public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
         public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
         public static ulong[] raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
+        public static ulong[] roleMessagesAllowed = LinkBotChannels.AllowedRoleMessages("roles");
+        public static ulong messageID = LinkBotChannels.MessageChannelID("channel");
 
         public static Dictionary<ulong, string> spellBetaName = ParseFiles.ParseFile("spell", "beta");
         public static Dictionary<ulong, string>[] dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
@@ -37,6 +39,9 @@ namespace DiscordBotOffline
         public static string[] patchData = ParseFiles.ParsePatchFile();
 
         public static List<ParseFiles.EQEvents> eqEvent = ParseFiles.ParseEventFile();
+
+        public static Dictionary<string, ulong> rolesName = ParseFiles.ParseRolesFile();
+        public static List<ParseFiles.ServersAndRoles> serverStatus = ParseFiles.ParseServerRoleFile();
 
         public static Dictionary<ulong, string> GetResults(string resultType)
         {
@@ -181,7 +186,7 @@ namespace DiscordBotOffline
                     overseerTestAgent = dbStrResultsT[1];
                     overseerTestQuest = dbStrResultsT[2];
                     break;
-                case "events":
+                case "event":
                     eqEvent = ParseFiles.ParseEventFile();
                     break;
                 case "item":
@@ -189,6 +194,12 @@ namespace DiscordBotOffline
                     break;
                 case "patch":
                     patchData = ParseFiles.ParsePatchFile();
+                    break;
+                case "role":
+                    roleMessagesAllowed = LinkBotChannels.AllowedRoleMessages("roles");
+                    messageID = LinkBotChannels.MessageChannelID("channel");
+                    rolesName = ParseFiles.ParseRolesFile();
+                    serverStatus = ParseFiles.ParseServerRoleFile();
                     break;
                 case "spell":
                     spellBetaName = ParseFiles.ParseFile("spell", "beta");
@@ -200,7 +211,7 @@ namespace DiscordBotOffline
 
         public static void CWLMethod(string cwlText, string cwlColor)
         {
-            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), cwlColor); Console.WriteLine(cwlText); Console.ResetColor();
+            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), cwlColor); Console.WriteLine($"[{DateTime.Now}] - {cwlText}"); Console.ResetColor();
         }
     }
 }

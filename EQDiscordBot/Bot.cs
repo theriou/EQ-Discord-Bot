@@ -1,35 +1,41 @@
-﻿using DiscordBotOffline.Commands;
+﻿using EQDiscordBot.Commands;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
+
     public class Bot
     {
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
+        private static HttpClient StatusClient = new HttpClient();
 
         public async Task RunAsync()
         {
             var json = string.Empty;
             string loadBotFiles = Globals.loadBotFiles;
 
-            string jsonConfig = @"config.json";
-            bool configExists = File.Exists(jsonConfig);
+            string jsonConfig = @"config/config.json";
 
-            if (configExists)
+            if (File.Exists(jsonConfig))
             {
-                Globals.CWLMethod("Config File Found", "Yellow");
+                Globals.CWLMethod("Config File Found, starting Bot...", "Yellow");
 
                 using (var fs = File.OpenRead(jsonConfig))
                 using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
-                    json = await sr.ReadToEndAsync().ConfigureAwait(false);
+                    json = await sr.ReadToEndAsync();
 
                 var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
 
@@ -38,11 +44,24 @@ namespace DiscordBotOffline
                     Token = configJson.Token,
                     TokenType = TokenType.Bot,
                     AutoReconnect = true,
-                    MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Debug
+                    MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Debug,
+                    Intents = DiscordIntents.All
                 };
 
                 Client = new DiscordClient(config);
                 Client.Ready += (OnClientReady);
+
+                //function for specific reaction changes
+                Client.MessageReactionAdded += OnReactionAdded;
+
+                //Set Timer, interval is milliseconds, 1000 = 1
+                //process this in Timer_Elapsed function
+                Timer timer = new Timer
+                {
+                    Interval = 180000
+                };
+                timer.Elapsed += Timer_ElapsedAsync;
+                timer.Start();
 
                 var commandsConfig = new CommandsNextConfiguration
                 {
@@ -85,5 +104,108 @@ namespace DiscordBotOffline
         {
             return Task.CompletedTask;
         }
+
+        private async Task OnReactionAdded(DiscordClient sender, MessageReactionAddEventArgs e)
+        {
+            var memberRole = e.Guild.GetRole(0);
+            if (Globals.roleMessagesAllowed.Contains(e.Message.Id))
+            {
+                if (Globals.rolesName.ContainsKey(e.Emoji.Name))
+                {
+                    memberRole = e.Guild.GetRole(Globals.rolesName[e.Emoji.Name]);
+                }
+                else
+                {
+                    memberRole = null;
+                }
+
+                var member = await e.Guild.GetMemberAsync(e.User.Id);
+
+                if (memberRole == null)
+                {
+                }
+                else
+                {
+                    var hasMemberRole = member.Roles.FirstOrDefault(s => s == memberRole);
+
+                    if (hasMemberRole == null)
+                    {
+                        await member.GrantRoleAsync(role: memberRole);
+                        Globals.CWLMethod($"{member.DisplayName} added Role: {memberRole.Name}", "Green");
+                    }
+                    else
+                    {
+                        await member.RevokeRoleAsync(role: memberRole);
+                        Globals.CWLMethod($"{member.DisplayName} removed Role: {memberRole.Name}", "Green");
+                    }
+                }
+
+                await e.Message.DeleteReactionAsync(e.Emoji, e.User, "auto remove reaction");
+            }
+        }
+
+        public async Task GetServerStatusData()
+        {
+            string newStatusResults = string.Empty,
+                oldStatusResults = string.Empty,
+                messageUpdate = string.Empty;
+
+            var eqResult = await StatusClient.GetStringAsync("https://census.daybreakgames.com/json/status/eq");
+
+            if (string.IsNullOrEmpty(eqResult) || (!eqResult.StartsWith("{") && !eqResult.EndsWith("}")))
+            {
+                Globals.CWLMethod($"Bad Census Data Received, Skipping...", "Red");
+            }
+            else
+            {
+                JObject eqStatusResult = JObject.Parse(eqResult);
+
+                foreach (var statusResults in Globals.serverStatus)
+                {
+                    newStatusResults = eqStatusResult["eq"][statusResults.ServerRegion][statusResults.ServerName]["status"].ToString();
+                    oldStatusResults = statusResults.ServerStatus;
+
+                    if (((oldStatusResults == "high" || oldStatusResults == "medium" || oldStatusResults == "low") && (newStatusResults == "locked" || newStatusResults == "down")) ||
+                            ((oldStatusResults == "locked" || oldStatusResults == "down") && (newStatusResults == "high" || newStatusResults == "medium" || newStatusResults == "low")))
+                    {
+                        messageUpdate += $"[{DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}] <@&{statusResults.RolesID}> From {oldStatusResults} to {newStatusResults}\n";
+                        Globals.CWLMethod($"{statusResults.ServerName} From {oldStatusResults} to {newStatusResults}", "Green");
+                    }
+
+                    statusResults.ServerStatus = newStatusResults;
+                }
+
+                Globals.CWLMethod($"Server Status Updated", "Cyan");
+
+                if (string.IsNullOrEmpty(messageUpdate))
+                {
+                }
+                else
+                {
+                    DiscordChannel channel = await Client.GetChannelAsync(Globals.messageID);
+                    await channel.SendMessageAsync(messageUpdate);
+                }
+            }
+
+        }
+
+        private async void Timer_ElapsedAsync(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                if (Globals.messageID == 0)
+                {
+                }
+                else
+                {
+                    await GetServerStatusData();
+                }
+            }
+            catch
+            {
+                Globals.CWLMethod($"Server Status Failed, Skipping this Update...", "Red");
+            }
+        }
+
     }
 }

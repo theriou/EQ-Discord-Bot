@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
     public struct ConfigJson
     {

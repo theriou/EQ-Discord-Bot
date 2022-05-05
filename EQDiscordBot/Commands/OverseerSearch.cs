@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class OverseerSearch : BaseCommandModule
     {

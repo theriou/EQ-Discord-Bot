@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class AchievementSearch : BaseCommandModule
     {
@@ -29,8 +29,8 @@ namespace DiscordBotOffline.Commands
                 {
                     string getAchieveSource = ctx.Message.ToString(),
                         achieveDBSource = string.Empty;
-                    bool achieveTest = getAchieveSource.Contains(ctx.Prefix + "achievet"),
-                        achieveBeta = getAchieveSource.Contains(ctx.Prefix + "achieveb");
+                    bool achieveTest = getAchieveSource.IndexOf(ctx.Prefix + "achievet", 0, StringComparison.CurrentCultureIgnoreCase) >= 0,
+                        achieveBeta = getAchieveSource.IndexOf(ctx.Prefix + "achieveb", 0, StringComparison.CurrentCultureIgnoreCase) >= 0;
 
                     if (achieveBeta == true && Globals.achieveBetaName.Count > 1)
                     {
@@ -59,7 +59,7 @@ namespace DiscordBotOffline.Commands
                     Description = achieveReturn
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync(embed: embed);
             }
         }
     }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class Raffle : BaseCommandModule
     {
@@ -33,9 +33,9 @@ namespace DiscordBotOffline.Commands
             {
                 string getRaffle = ctx.Message.ToString(),
                     raffleReturn = string.Empty;
-                bool raffleDrawing = getRaffle.Contains(ctx.Prefix + "raffler"),
-                    raffleEnd = getRaffle.Contains(ctx.Prefix + "rafflee"),
-                    raffleStart = getRaffle.Contains(ctx.Prefix + "raffles");
+                bool raffleDrawing = getRaffle.IndexOf(ctx.Prefix + "raffler", 0, StringComparison.CurrentCultureIgnoreCase) >= 0,
+                    raffleEnd = getRaffle.IndexOf(ctx.Prefix + "rafflee", 0, StringComparison.CurrentCultureIgnoreCase) >= 0,
+                    raffleStart = getRaffle.IndexOf(ctx.Prefix + "raffles", 0, StringComparison.CurrentCultureIgnoreCase) >= 0;
 
                 Globals.CWLMethod("Raffle Command Used", "Cyan");
 
@@ -128,7 +128,7 @@ namespace DiscordBotOffline.Commands
                         Description = raffleReturn
                     };
 
-                    await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                    await ctx.Channel.SendMessageAsync(embed: embed);
                 }
 
             }

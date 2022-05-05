@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class EQPatch : BaseCommandModule
     {
@@ -39,7 +39,7 @@ namespace DiscordBotOffline.Commands
                     Description = patchReturn
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync(embed: embed);
             }
         }
     }

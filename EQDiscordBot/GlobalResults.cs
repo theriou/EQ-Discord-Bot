@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace DiscordBotOffline
+namespace EQDiscordBot
 {
     class GlobalResults
     {
@@ -20,19 +20,32 @@ namespace DiscordBotOffline
                 gotOutputUrl = getGlobalResults[1],
                 gotDbSource = getGlobalResults[2],
                 patchDescription = getPatchData[0],
-                patchDate = getPatchData[1],
-                patchLink = getPatchData[2],
+                patchStartDate = getPatchData[1],
+                patchEndDate = getPatchData[2],
+                patchLink = getPatchData[3],
                 dataReturn = string.Empty,
                 patchOutput = string.Empty;
             Dictionary<ulong, string> searchSource = Globals.GetResults(urlType);
 
             if (urlType == "patch")
             {
-                TimeSpan patchTime = DateTime.Parse(patchDate) - DateTime.Now;
+                TimeSpan patchStartTime = DateTime.Parse(patchStartDate) - DateTime.Now;
+                TimeSpan patchEndTime = DateTime.Parse(patchEndDate) - DateTime.Now;
 
-                patchOutput = (patchTime.TotalSeconds < 0) ? "Servers should already be Up!" : $"{TimeLeft(patchTime)} until Servers are Up";
+                if (patchStartTime.TotalSeconds > 0)
+                {
+                    patchOutput = $"{TimeLeft(patchStartTime)} until Servers go Down";
+                }
+                else if (patchStartTime.TotalSeconds < 0 && patchEndTime.TotalSeconds > 0)
+                {
+                    patchOutput = $"{TimeLeft(patchEndTime)} until Servers are Up";
+                }
+                else
+                {
+                    patchOutput = "Servers Should already be Up!";
+                }
 
-                Globals.CWLMethod($"Patch: {patchDescription}\nDate: {patchDate}\nLink: {patchLink}", "Green");
+                Globals.CWLMethod($"Patch: {patchDescription}\nDate: {patchEndDate}\nLink: {patchLink}", "Green");
                 dataReturn = $"{patchDescription}\n\n{patchOutput}\n\n[Update Notes and Changes]({patchLink})\n";
             }
             else if (urlType == "event")

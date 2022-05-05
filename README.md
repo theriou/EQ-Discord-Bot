@@ -5,6 +5,8 @@ You can see a working version (when EQRLinkBot is online) in the EQ Resource Dis
 \
 Requires a Discord Bot set up to your discord server, recommended to google this set up process\
 \
+Bot will require your Bot to have all Intents to properly update membergroups\
+\
 Files should be in a config folder for Allowed Channels, Config file, or the Server Emoji/Json/Role stuff, the actual data files will be in a data folder\
 \
 Requires a config.json file with the following format:\

@@ -1,4 +1,4 @@
-﻿namespace DiscordBotOffline
+﻿namespace EQDiscordBot
 {
     class Program
     {

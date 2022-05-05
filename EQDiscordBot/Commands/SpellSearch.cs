@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBotOffline.Commands
+namespace EQDiscordBot.Commands
 {
     class SpellSearch : BaseCommandModule
     {
@@ -29,8 +29,8 @@ namespace DiscordBotOffline.Commands
                 {
                     string getSpellSource = ctx.Message.ToString(),
                         spellDBSource = string.Empty;
-                    bool spellTest = getSpellSource.Contains(ctx.Prefix + "spellt"),
-                        spellBeta = getSpellSource.Contains(ctx.Prefix + "spellb");
+                    bool spellTest = getSpellSource.IndexOf(ctx.Prefix + "spellt", 0, StringComparison.CurrentCultureIgnoreCase) >= 0,
+                        spellBeta = getSpellSource.IndexOf(ctx.Prefix + "spellb", 0, StringComparison.CurrentCultureIgnoreCase) >= 0;
 
                     if (spellBeta == true && Globals.spellBetaName.Count > 1)
                     {
@@ -59,7 +59,7 @@ namespace DiscordBotOffline.Commands
                     Description = spellReturn
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: embed).ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync(embed: embed);
             }
         }
     }
