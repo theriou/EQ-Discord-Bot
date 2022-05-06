@@ -40,7 +40,7 @@ patch.json - json format Patch example:\
 "patch": "All EverQuest Live Servers will be brought offline on Wednesday, March 9, 2022 at 6:00 AM PT* for an update. Downtime is expected to last approximately 8 hours.",\
 "startdate": "2022-03-09T06:00:00.0000000-07:00",\
 "enddate": "2022-03-09T14:00:00.0000000-07:00",\
-"link": "https:\/\/eqresource.com\/board\/index.php?topic=218544"\
+"link": "`https:\/\/eqresource.com\/board\/index.php?topic=218544`"\
 }\
 You can use a default Link for Update section such as the EQ Forums News and Announcements `https://forums.daybreakgames.com/eq/index.php?forums/news-and-announcements.2/` in place of the EQResource link\
 \
