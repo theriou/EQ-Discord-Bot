@@ -59,7 +59,12 @@ namespace EQDiscordBot.Commands
                         Globals.ReloadValues("spell");
                         reloadSection = "Spell";
                         break;
+                    case "url":
+                        Globals.ReloadValues("url");
+                        reloadSection = "URL";
+                        break;
                     case "all":
+                        Globals.ReloadValues("url");
                         Globals.ReloadValues("achieve");
                         Globals.ReloadValues("channel");
                         Globals.ReloadValues("dbstr");
@@ -71,7 +76,7 @@ namespace EQDiscordBot.Commands
                         reloadSection = "All File";
                         break;
                     default:
-                        reloadSection = "A Type of Reload must be Specified after the command: achieve, channel, dbstr, event, item, patch, role, spell or all";
+                        reloadSection = "A Type of Reload must be Specified after the command: achieve, channel, dbstr, event, item, patch, role, spell, url or all";
                         defaultReply = true;
                         break;
                 }

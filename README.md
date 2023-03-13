@@ -4,10 +4,11 @@ EQ Discord Bot that uses Offline files for Data instead of having to ping Websit
 You can see a working version (when EQRLinkBot is online) in the EQ Resource Discord: `https://discord.gg/AwbHXak`\
 \
 Requires a Discord Bot set up to your discord server, recommended to google this set up process\
+Probably Requires .net 6 version to run, get from Microsoft\
 \
-Bot will require your Bot to have all Intents to properly update membergroups\
+Bot will require your Bot to have all Intents to properly update membergroups and read messages\
 \
-Files should be in a config folder for Allowed Channels, Config file, or the Server Emoji/Json/Role stuff, the actual data files will be in a data folder\
+Config Files should be in a config folder for Channels, bot Config file, Server Emoji/Json/Role, urls, etc. stuff, the actual data files will be in a data folder\
 \
 Requires a config.json file with the following format:\
 {\
@@ -21,9 +22,9 @@ This file needs 1 channel per line that you would like the bot to Respond to que
 \
 Requires an AllowedChannelsAdmin.txt:\
 This file needs 1 channel per line that you would like the bot to Respond to Reload queries with, this should be in an "Admin" like channel so random users can't constantly reload files on you\
-The reload command currently accepts: achieve, channel, dbstr (faction + overseer), event, item, patch, role, spell, all (everything in the list)\
+The reload command currently accepts: achieve, channel, dbstr (faction + overseer), event, item, patch, role, spell, url, all (everything in the list)\
 \
-Requires up to the following EQ files based on which you want to enable/do:\
+Requires up to the following EQ files based on which Data you want to enable:\
 dbstr_usL.txt - L Live, T Test, B Beta after i.e. dbstr_usL.txt for Live Faction, Overseer Agents, and Overseer Quests\
 spells_usL.txt L Live, T Test, B Beta after i.e. spells_usL.txt for Live Spells\
 AchievementsClientL.txt - L Live, T Test, B Beta after i.e. AchievementsClientL.txt for Achievements\
@@ -34,6 +35,7 @@ AllowedRoleMessages.txt - this contains the message id's that the bot will look 
 ServerChannelId.txt - this specifies a channel to output when servers go from locked/down to not locked/down or vice versa\
 ServerJSON.txt - this contains the json data needed to parse - plus the member group to @ on changes, in the form of ServerType^Name^MemberGroup\
 ServerRoles.txt - this contains the emoji name to look for plus the membergroup to add or remove from when clicked, in the form of EmojiName^MemberGroup\
+URLData.txt - this contains the urls for various things in the order of Census, Achievements, Events, Factions, Items, Spells\
 \
 patch.json - json format Patch example:\
 {\

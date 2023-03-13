@@ -1,17 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace EQDiscordBot
 {
     class Globals
     {
         public static string loadBotFiles = string.Empty;
-        public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
-        public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannels("normal");
-        public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
-        public static ulong[] raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
-        public static ulong[] roleMessagesAllowed = LinkBotChannels.AllowedRoleMessages("roles");
-        public static ulong messageID = LinkBotChannels.MessageChannelID("channel");
+        public static readonly HttpClient StatusClient = new HttpClient();
+
+        public static string[] urlResults = MultiParseFiles.DataURL();
+        public static string censusURL = urlResults[0];
+        public static string achieveURL = urlResults[1];
+        public static string eventURL = urlResults[2];
+        public static string factionURL = urlResults[3];
+        public static string itemURL = urlResults[4];
+        public static string spellURL = urlResults[5];
+
+        public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannelMessages("admin", "channels");
+        public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannelMessages("", "channels");
+        public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedChannelMessages("admin", "raffle");
+        public static ulong[] raffleChannelsAllowed = LinkBotChannels.AllowedChannelMessages("", "raffle");
+        public static ulong[] roleMessagesAllowed = LinkBotChannels.AllowedChannelMessages("", "roles");
+        public static ulong messageID = LinkBotChannels.MessageChannelID();
 
         public static Dictionary<ulong, string> spellBetaName = ParseFiles.ParseFile("spell", "beta");
         public static Dictionary<ulong, string>[] dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
@@ -89,67 +100,62 @@ namespace EQDiscordBot
             string dbSource = string.Empty,
                 outputUrl = string.Empty,
                 sourceType = string.Empty;
-            const string dbSourceB = "Beta",
+            string dbSourceB = "Beta",
                 dbSourceL = "Live",
                 dbSourceT = "Test",
                 dbUrlSourceB = "&source=beta",
-                dbUrlSourceT = "&source=test",
-                achieveStart = "https://achievements.eqresource.com/achievements.php?id=",
-                eventStart = "https://events.eqresource.com/index.php?action=display_event&oid=",
-                factionStart = "https://factions.eqresource.com/factions.php?id=",
-                itemStart = "https://items.eqresource.com/items.php?id=",
-                spellStart = "https://spells.eqresource.com/spells.php?id=";
+                dbUrlSourceT = "&source=test";
 
             switch (urlType)
             {
                 case "achieve":
-                    outputUrl = achieveStart;
+                    outputUrl = achieveURL;
                     dbSource = dbSourceL;
                     break;
                 case "achievet":
                     sourceType = dbUrlSourceT;
-                    outputUrl = achieveStart;
+                    outputUrl = achieveURL;
                     dbSource = dbSourceT;
                     break;
                 case "achieveb":
                     sourceType = dbUrlSourceB;
-                    outputUrl = achieveStart;
+                    outputUrl = achieveURL;
                     dbSource = dbSourceB;
                     break;
                 case "event":
-                    outputUrl = eventStart;
+                    outputUrl = eventURL;
                     break;
                 case "faction":
-                    outputUrl = factionStart;
+                    outputUrl = factionURL;
                     dbSource = dbSourceL;
                     break;
                 case "factiont":
                     sourceType = dbUrlSourceT;
-                    outputUrl = factionStart;
+                    outputUrl = factionURL;
                     dbSource = dbSourceT;
                     break;
                 case "factionb":
                     sourceType = dbUrlSourceB;
-                    outputUrl = factionStart;
+                    outputUrl = factionURL;
                     dbSource = dbSourceB;
                     break;
                 case "item":
-                    outputUrl = itemStart;
+                    outputUrl = itemURL;
                     break;
                 case "patch":
                     break;
                 case "spell":
-                    outputUrl = spellStart;
+                    outputUrl = spellURL;
                     dbSource = dbSourceL;
                     break;
                 case "spellt":
                     sourceType = dbUrlSourceT;
-                    outputUrl = spellStart;
+                    outputUrl = spellURL;
                     dbSource = dbSourceT;
                     break;
                 case "spellb":
                     sourceType = dbUrlSourceB;
-                    outputUrl = spellStart;
+                    outputUrl = spellURL;
                     dbSource = dbSourceB;
                     break;
             }
@@ -167,10 +173,10 @@ namespace EQDiscordBot
                     achieveTestName = ParseFiles.ParseFile("achieve", "test");
                     break;
                 case "channel":
-                    channelsAllowedAdmin = LinkBotChannels.AllowedChannels("admin");
-                    channelsAllowed = LinkBotChannels.AllowedChannels("normal");
-                    raffleChannelsAdmins = LinkBotChannels.AllowedRaffleChannels("admin");
-                    raffleChannelsAllowed = LinkBotChannels.AllowedRaffleChannels("channel");
+                    channelsAllowedAdmin = LinkBotChannels.AllowedChannelMessages("admin", "channels");
+                    channelsAllowed = LinkBotChannels.AllowedChannelMessages("", "channels");
+                    raffleChannelsAdmins = LinkBotChannels.AllowedChannelMessages("admin", "raffle");
+                    raffleChannelsAllowed = LinkBotChannels.AllowedChannelMessages("", "raffle");
                     break;
                 case "dbstr":
                     dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
@@ -196,8 +202,8 @@ namespace EQDiscordBot
                     patchData = ParseFiles.ParsePatchFile();
                     break;
                 case "role":
-                    roleMessagesAllowed = LinkBotChannels.AllowedRoleMessages("roles");
-                    messageID = LinkBotChannels.MessageChannelID("channel");
+                    roleMessagesAllowed = LinkBotChannels.AllowedChannelMessages("", "roles");
+                    messageID = LinkBotChannels.MessageChannelID();
                     rolesName = ParseFiles.ParseRolesFile();
                     serverStatus = ParseFiles.ParseServerRoleFile();
                     break;
@@ -205,6 +211,15 @@ namespace EQDiscordBot
                     spellBetaName = ParseFiles.ParseFile("spell", "beta");
                     spellLiveName = ParseFiles.ParseFile("spell", "live");
                     spellTestName = ParseFiles.ParseFile("spell", "test");
+                    break;
+                case "url":
+                    urlResults = MultiParseFiles.DataURL();
+                    censusURL = urlResults[0];
+                    achieveURL = urlResults[1];
+                    eventURL = urlResults[2];
+                    factionURL = urlResults[3];
+                    itemURL = urlResults[4];
+                    spellURL = urlResults[5];
                     break;
             }
         }

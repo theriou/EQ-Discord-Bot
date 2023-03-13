@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 
 namespace EQDiscordBot
 {
@@ -12,8 +11,7 @@ namespace EQDiscordBot
         public static Dictionary<ulong, string> ParseFile(string fileType, string fileSource)
         {
             Dictionary<ulong, string> parseName = new Dictionary<ulong, string>();
-            string parseFileLoc = string.Empty,
-                parseFileSource = string.Empty;
+            string parseFileLoc = string.Empty;
 
             if (fileType == "achieve")
             {
@@ -21,22 +19,18 @@ namespace EQDiscordBot
                 {
                     case "test":
                         parseFileLoc = "data/AchievementsClientT.txt";
-                        parseFileSource = "Test Achievements";
                         break;
                     case "beta":
                         parseFileLoc = "data/AchievementsClientB.txt";
-                        parseFileSource = "Beta Achievements";
                         break;
                     case "live":
                         parseFileLoc = "data/AchievementsClientL.txt";
-                        parseFileSource = "Live Achievements";
                         break;
                 }
             }
             if (fileType == "item")
             {
                 parseFileLoc = "data/itemlist.txt";
-                parseFileSource = "Items";
             }
             if (fileType == "spell")
             {
@@ -44,15 +38,12 @@ namespace EQDiscordBot
                 {
                     case "test":
                         parseFileLoc = "data/spells_usT.txt";
-                        parseFileSource = "Test Spells";
                         break;
                     case "beta":
                         parseFileLoc = "data/spells_usB.txt";
-                        parseFileSource = "Beta Spells";
                         break;
                     case "live":
                         parseFileLoc = "data/spells_usL.txt";
-                        parseFileSource = "Live Spells";
                         break;
                 }
             }
@@ -67,13 +58,13 @@ namespace EQDiscordBot
                     parseName.Add(ulong.Parse(parseFields[0]), parseFields[1]);
                 }
 
-                Globals.CWLMethod($"{parseFileSource}: {parseName.Count()}", "Magenta");
+                Globals.CWLMethod($"{fileSource} {fileType}: {parseName.Count()}", "Magenta");
 
             }
             else
             {
                 parseName.Add(0, "");
-                Globals.CWLMethod($"{parseFileSource} File Not Found...", "Red");
+                Globals.CWLMethod($"{fileSource} {fileType} File Not Found...", "Red");
 
             }
 
@@ -82,10 +73,9 @@ namespace EQDiscordBot
 
         public static string[] ParsePatchFile()
         {
-            string parsePatchFileLoc = string.Empty;
             string[] eqPatchData;
 
-            parsePatchFileLoc = "data/patch.json";
+            string parsePatchFileLoc = "data/patch.json";
 
             if (File.Exists(parsePatchFileLoc))
             {
@@ -150,9 +140,8 @@ namespace EQDiscordBot
         public static Dictionary<string, ulong> ParseRolesFile()
         {
             Dictionary<string, ulong> rolesName = new Dictionary<string, ulong>();
-            string roleFileLoc = string.Empty;
 
-            roleFileLoc = "config/ServerRoles.txt";
+            string roleFileLoc = "config/ServerRoles.txt";
 
             if (File.Exists(roleFileLoc))
             {
@@ -164,7 +153,7 @@ namespace EQDiscordBot
                     rolesName.Add(roleFields[0], ulong.Parse(roleFields[1]));
                 }
 
-                Globals.CWLMethod($"{rolesName.Count()} Roles Found", "Yellow");
+                Globals.CWLMethod($"{rolesName.Count()} Member Roles Found", "Yellow");
             }
             else
             {
@@ -183,15 +172,13 @@ namespace EQDiscordBot
             public string ServerStatus { get; set; }
         }
 
-        private static HttpClient StatusClients = new HttpClient();
-
 
         public static List<ServersAndRoles> ParseServerRoleFile()
         {
             List<ServersAndRoles> serverRoles = new List<ServersAndRoles>();
-            string serverRoleFileLoc = string.Empty;
+            var eqResults = "0";
 
-            serverRoleFileLoc = "config/ServerJSON.txt";
+            string serverRoleFileLoc = "config/ServerJSON.txt";
 
             if (File.Exists(serverRoleFileLoc))
             {
@@ -203,14 +190,22 @@ namespace EQDiscordBot
                     serverRoles.Add(new ServersAndRoles() { ServerRegion = serverRoleFields[0], ServerName = serverRoleFields[1], RolesID = ulong.Parse(serverRoleFields[2]) });
                 }
 
-                Globals.CWLMethod($"{serverRoles.Count()} Servers And Roles Found, Parsing Initial Status", "Yellow");
+                Globals.CWLMethod($"{serverRoles.Count()} Servers Found, Parsing Initial Status", "Yellow");
 
                 try
                 {
-                    var eqResults = StatusClients.GetStringAsync("https://census.daybreakgames.com/json/status/eq").Result;
-
-                    if (string.IsNullOrEmpty(eqResults) && (!eqResults.StartsWith("{") && !eqResults.EndsWith("}")))
+                    if (string.IsNullOrEmpty(Globals.censusURL))
                     {
+                        eqResults = null;
+                    }
+                    else
+                    {
+                        eqResults = Globals.StatusClient.GetStringAsync(Globals.censusURL).Result;
+                    }
+
+                    if (string.IsNullOrEmpty(eqResults) || (!eqResults.StartsWith("{") && !eqResults.EndsWith("}")))
+                    {
+                        Globals.CWLMethod($"Null or Bad Initial Census Data Received", "Red");
                     }
                     else
                     {

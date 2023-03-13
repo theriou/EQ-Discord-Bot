@@ -8,7 +8,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -20,14 +19,13 @@ namespace EQDiscordBot
     {
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
-        private static HttpClient StatusClient = new HttpClient();
 
         public async Task RunAsync()
         {
             var json = string.Empty;
             string loadBotFiles = Globals.loadBotFiles;
 
-            string jsonConfig = @"config/config.json";
+            string jsonConfig = "config/config.json";
 
             if (File.Exists(jsonConfig))
             {
@@ -149,12 +147,20 @@ namespace EQDiscordBot
             string newStatusResults = string.Empty,
                 oldStatusResults = string.Empty,
                 messageUpdate = string.Empty;
+            var eqResult = "0";
 
-            var eqResult = await StatusClient.GetStringAsync("https://census.daybreakgames.com/json/status/eq");
+            if (string.IsNullOrEmpty(Globals.censusURL))
+            {
+                eqResult = null;
+            }
+            else
+            {
+                eqResult = await Globals.StatusClient.GetStringAsync(Globals.censusURL);
+            }
 
             if (string.IsNullOrEmpty(eqResult) || (!eqResult.StartsWith("{") && !eqResult.EndsWith("}")))
             {
-                Globals.CWLMethod($"Bad Census Data Received, Skipping...", "Red");
+                Globals.CWLMethod($"Null or Bad Census Data Received, Skipping...", "Red");
             }
             else
             {

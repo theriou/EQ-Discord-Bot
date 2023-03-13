@@ -11,22 +11,18 @@ namespace EQDiscordBot
             Dictionary<ulong, string> factionName = new Dictionary<ulong, string>(),
                 overseerAgent = new Dictionary<ulong, string>(),
                 overseerQuest = new Dictionary<ulong, string>();
-            string dbStrFileLoc = string.Empty,
-                dbStrFileSource = string.Empty;
+            string dbStrFileLoc = string.Empty;
 
             switch (multiFileType)
             {
                 case "test":
                     dbStrFileLoc = "data/dbstr_usT.txt";
-                    dbStrFileSource = "Test";
                     break;
                 case "beta":
                     dbStrFileLoc = "data/dbstr_usB.txt";
-                    dbStrFileSource = "Beta";
                     break;
                 case "live":
                     dbStrFileLoc = "data/dbstr_usL.txt";
-                    dbStrFileSource = "Live";
                     break;
             }
 
@@ -51,8 +47,8 @@ namespace EQDiscordBot
                             break;
                     }
                 }
-                Globals.CWLMethod($"{dbStrFileSource} Factions: {factionName.Count()}\n{dbStrFileSource} Overseer Agents: {overseerAgent.Count()}\n"
-                    + $"{dbStrFileSource} Overseer Quests: {overseerQuest.Count()}", "Magenta");
+                Globals.CWLMethod($"{multiFileType} Factions: {factionName.Count()}\n{multiFileType} Overseer Agents: {overseerAgent.Count()}\n"
+                    + $"{multiFileType} Overseer Quests: {overseerQuest.Count()}", "Magenta");
             }
             else
             {
@@ -60,10 +56,56 @@ namespace EQDiscordBot
                 overseerAgent.Add(0, "");
                 overseerQuest.Add(0, "");
 
-                Globals.CWLMethod($"{dbStrFileSource} Faction, Overseer Agent, Overseer Quest File Not Found", "Red");
+                Globals.CWLMethod($"{multiFileType} Faction, Overseer Agent, Overseer Quest File Not Found", "Red");
             }
 
             return new[] { factionName, overseerAgent, overseerQuest };
+        }
+
+        public static string[] DataURL()
+        {
+            string fileType = string.Empty,
+                censusURL = string.Empty,
+                achieveURL = string.Empty,
+                eventURL = string.Empty,
+                factionURL = string.Empty,
+                itemURL = string.Empty,
+                spellURL = string.Empty;
+            string dataURLFile = "config/URLData.txt";
+
+            var dataURLLines = File.ReadAllLines(dataURLFile);
+
+            for (int i = 0; i < dataURLLines.Length; i++)
+            {
+                var dataURLFields = dataURLLines[i].Split('^');
+
+                switch (dataURLFields[0])
+                {
+                    case "0":
+                        censusURL = dataURLFields[1];
+                        break;
+                    case "1":
+                        achieveURL = dataURLFields[1];
+                        break;
+                    case "2":
+                        eventURL = dataURLFields[1];
+                        break;
+                    case "3":
+                        factionURL = dataURLFields[1];
+                        break;
+                    case "4":
+                        itemURL = dataURLFields[1];
+                        break;
+                    case "5":
+                        spellURL = dataURLFields[1];
+                        break;
+                }
+            }
+            
+            Globals.CWLMethod($"Census URL: {censusURL}\nAchieve URL: {achieveURL}\nEvent URL: {eventURL}\n" +
+                $"Faction URL: {factionURL}\nItem URL: {itemURL}\nSpell URL: {spellURL}", "Yellow");
+
+            return new[] { censusURL, achieveURL, eventURL, factionURL, itemURL, spellURL };
         }
     }
 }
