@@ -58,7 +58,6 @@ namespace EQDiscordBot
         public static ulong MessageChannelID()
         {
             ulong messageDataList;
-
             string messagePath = "config/ServerChannelId.txt";
 
             if (File.Exists(messagePath))

@@ -45,7 +45,7 @@ namespace EQDiscordBot
                     patchOutput = "Servers Should already be Up!";
                 }
 
-                Globals.CWLMethod($"Patch: {patchDescription}\nDate: {patchEndDate}\nLink: {patchLink}", "Green");
+                Globals.CWLMethod($"Patch: {patchDescription}\nStart: {patchStartDate}\nEnd: {patchEndDate}\nLink: {patchLink}", "Green");
                 dataReturn = $"{patchDescription}\n\n{patchOutput}\n\n[Update Notes and Changes]({patchLink})\n";
             }
             else if (urlType == "event")
@@ -66,7 +66,7 @@ namespace EQDiscordBot
 
                 if (eventDataReturn.Any() == false)
                 {
-                    Globals.CWLMethod("No Events Now or Soon", "Red");
+                    Globals.CWLMethod("No Events Active", "Red");
                     dataReturn += (nameSearch == "upcoming") ? "\nNo Events begin in the next 30 Days." : "\nNo Events are Currently Active.";
                 }
                 else

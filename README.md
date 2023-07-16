@@ -35,7 +35,12 @@ AllowedRoleMessages.txt - this contains the message id's that the bot will look 
 ServerChannelId.txt - this specifies a channel to output when servers go from locked/down to not locked/down or vice versa\
 ServerJSON.txt - this contains the json data needed to parse - plus the member group to @ on changes, in the form of ServerType^Name^MemberGroup\
 ServerRoles.txt - this contains the emoji name to look for plus the membergroup to add or remove from when clicked, in the form of EmojiName^MemberGroup\
-URLData.txt - this contains the urls for various things in the order of Census, Achievements, Events, Factions, Items, Spells\
+URLData.json - this contains the urls for the bot to link to the search results (census, achieve, event, faction, item, spell), with the following format\
+{\
+  "census": "urlhere",\
+  "achieve": "urlhere",\
+  etc, per type\
+}\
 \
 patch.json - json format Patch example:\
 {\

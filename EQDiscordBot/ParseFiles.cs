@@ -74,7 +74,6 @@ namespace EQDiscordBot
         public static string[] ParsePatchFile()
         {
             string[] eqPatchData;
-
             string parsePatchFileLoc = "data/patch.json";
 
             if (File.Exists(parsePatchFileLoc))
@@ -94,6 +93,41 @@ namespace EQDiscordBot
             return eqPatchData;
         }
 
+        public static Dictionary<string, string> ParseURLFile()
+        {
+            Dictionary<string, string> urlList = new Dictionary<string, string>();
+            string parseParseFileLoc = "config/URLData.json";
+            string[] urlTypes = { "achieve", "census", "event", "faction", "item", "spell" };
+
+            if (File.Exists(parseParseFileLoc))
+            {
+                JObject urlFile = JObject.Parse(File.ReadAllText(parseParseFileLoc));
+
+                Globals.CWLMethod("URL Data File Loaded", "Magenta");
+
+                foreach (string url in urlTypes)
+                {
+                   if (urlFile.ContainsKey(url))
+                    {
+                        urlList.Add(url, urlFile[url].ToString());
+                        urlTypes = urlTypes.Where(u => u != url).ToArray();
+                    }
+                }
+            }
+            else
+            {
+                Globals.CWLMethod("URL Data File Not Found...", "Red");
+            }
+
+            foreach(string url in urlTypes)
+            {
+                Globals.CWLMethod($"{url} URL Data Missing", "Red");
+                urlList.Add(url, "");
+            }
+
+            return urlList;
+        }
+
         public class EQEvents
         {
             public int EventID { get; set; }
@@ -104,10 +138,8 @@ namespace EQDiscordBot
 
         public static List<EQEvents> ParseEventFile()
         {
-            string parseEventFileLoc = string.Empty;
             List<EQEvents> eqEventData = new List<EQEvents>();
-
-            parseEventFileLoc = "data/events.txt";
+            string parseEventFileLoc = "data/events.txt";
 
             if (File.Exists(parseEventFileLoc))
             {
@@ -140,7 +172,6 @@ namespace EQDiscordBot
         public static Dictionary<string, ulong> ParseRolesFile()
         {
             Dictionary<string, ulong> rolesName = new Dictionary<string, ulong>();
-
             string roleFileLoc = "config/ServerRoles.txt";
 
             if (File.Exists(roleFileLoc))
@@ -177,7 +208,6 @@ namespace EQDiscordBot
         {
             List<ServersAndRoles> serverRoles = new List<ServersAndRoles>();
             var eqResults = "0";
-
             string serverRoleFileLoc = "config/ServerJSON.txt";
 
             if (File.Exists(serverRoleFileLoc))
@@ -187,7 +217,12 @@ namespace EQDiscordBot
                 for (int i = 0; i < roleLines.Length; i++)
                 {
                     var serverRoleFields = roleLines[i].Split('^');
-                    serverRoles.Add(new ServersAndRoles() { ServerRegion = serverRoleFields[0], ServerName = serverRoleFields[1], RolesID = ulong.Parse(serverRoleFields[2]) });
+                    serverRoles.Add(new ServersAndRoles() 
+                    { 
+                        ServerRegion = serverRoleFields[0], 
+                        ServerName = serverRoleFields[1], 
+                        RolesID = ulong.Parse(serverRoleFields[2]) 
+                    });
                 }
 
                 Globals.CWLMethod($"{serverRoles.Count()} Servers Found, Parsing Initial Status", "Yellow");

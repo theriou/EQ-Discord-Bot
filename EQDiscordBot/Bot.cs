@@ -3,12 +3,10 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -24,22 +22,17 @@ namespace EQDiscordBot
         {
             var json = string.Empty;
             string loadBotFiles = Globals.loadBotFiles;
-
             string jsonConfig = "config/config.json";
 
             if (File.Exists(jsonConfig))
             {
                 Globals.CWLMethod("Config File Found, starting Bot...", "Yellow");
 
-                using (var fs = File.OpenRead(jsonConfig))
-                using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
-                    json = await sr.ReadToEndAsync();
-
-                var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
+                JObject botTokenPrefix = JObject.Parse(File.ReadAllText(jsonConfig));
 
                 var config = new DiscordConfiguration
                 {
-                    Token = configJson.Token,
+                    Token = botTokenPrefix["token"].ToString(),
                     TokenType = TokenType.Bot,
                     AutoReconnect = true,
                     MinimumLogLevel = Microsoft.Extensions.Logging.LogLevel.Debug,
@@ -63,7 +56,7 @@ namespace EQDiscordBot
 
                 var commandsConfig = new CommandsNextConfiguration
                 {
-                    StringPrefixes = new string[] { configJson.Prefix },
+                    StringPrefixes = new string[] { botTokenPrefix["prefix"].ToString() },
                     EnableDms = false,
                     EnableMentionPrefix = true,
                     CaseSensitive = false,

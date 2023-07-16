@@ -9,20 +9,20 @@ namespace EQDiscordBot
         public static string loadBotFiles = string.Empty;
         public static readonly HttpClient StatusClient = new HttpClient();
 
-        public static string[] urlResults = MultiParseFiles.DataURL();
-        public static string censusURL = urlResults[0];
-        public static string achieveURL = urlResults[1];
-        public static string eventURL = urlResults[2];
-        public static string factionURL = urlResults[3];
-        public static string itemURL = urlResults[4];
-        public static string spellURL = urlResults[5];
-
         public static ulong[] channelsAllowedAdmin = LinkBotChannels.AllowedChannelMessages("admin", "channels");
         public static ulong[] channelsAllowed = LinkBotChannels.AllowedChannelMessages("", "channels");
         public static ulong[] raffleChannelsAdmins = LinkBotChannels.AllowedChannelMessages("admin", "raffle");
         public static ulong[] raffleChannelsAllowed = LinkBotChannels.AllowedChannelMessages("", "raffle");
         public static ulong[] roleMessagesAllowed = LinkBotChannels.AllowedChannelMessages("", "roles");
         public static ulong messageID = LinkBotChannels.MessageChannelID();
+
+        public static Dictionary<string, string> urlResults = ParseFiles.ParseURLFile();
+        public static string achieveURL = urlResults["achieve"];
+        public static string censusURL = urlResults["census"];
+        public static string eventURL = urlResults["event"];
+        public static string factionURL = urlResults["faction"];
+        public static string itemURL = urlResults["item"];
+        public static string spellURL = urlResults["spell"];
 
         public static Dictionary<ulong, string> spellBetaName = ParseFiles.ParseFile("spell", "beta");
         public static Dictionary<ulong, string>[] dbStrResultsB = MultiParseFiles.ParseDBStrFiles("beta");
@@ -213,13 +213,13 @@ namespace EQDiscordBot
                     spellTestName = ParseFiles.ParseFile("spell", "test");
                     break;
                 case "url":
-                    urlResults = MultiParseFiles.DataURL();
-                    censusURL = urlResults[0];
-                    achieveURL = urlResults[1];
-                    eventURL = urlResults[2];
-                    factionURL = urlResults[3];
-                    itemURL = urlResults[4];
-                    spellURL = urlResults[5];
+                    urlResults = ParseFiles.ParseURLFile();
+                    achieveURL = urlResults["achieve"];
+                    censusURL = urlResults["census"];
+                    eventURL = urlResults["event"];
+                    factionURL = urlResults["faction"];
+                    itemURL = urlResults["item"];
+                    spellURL = urlResults["spell"];
                     break;
             }
         }

@@ -62,50 +62,5 @@ namespace EQDiscordBot
             return new[] { factionName, overseerAgent, overseerQuest };
         }
 
-        public static string[] DataURL()
-        {
-            string fileType = string.Empty,
-                censusURL = string.Empty,
-                achieveURL = string.Empty,
-                eventURL = string.Empty,
-                factionURL = string.Empty,
-                itemURL = string.Empty,
-                spellURL = string.Empty;
-            string dataURLFile = "config/URLData.txt";
-
-            var dataURLLines = File.ReadAllLines(dataURLFile);
-
-            for (int i = 0; i < dataURLLines.Length; i++)
-            {
-                var dataURLFields = dataURLLines[i].Split('^');
-
-                switch (dataURLFields[0])
-                {
-                    case "0":
-                        censusURL = dataURLFields[1];
-                        break;
-                    case "1":
-                        achieveURL = dataURLFields[1];
-                        break;
-                    case "2":
-                        eventURL = dataURLFields[1];
-                        break;
-                    case "3":
-                        factionURL = dataURLFields[1];
-                        break;
-                    case "4":
-                        itemURL = dataURLFields[1];
-                        break;
-                    case "5":
-                        spellURL = dataURLFields[1];
-                        break;
-                }
-            }
-            
-            Globals.CWLMethod($"Census URL: {censusURL}\nAchieve URL: {achieveURL}\nEvent URL: {eventURL}\n" +
-                $"Faction URL: {factionURL}\nItem URL: {itemURL}\nSpell URL: {spellURL}", "Yellow");
-
-            return new[] { censusURL, achieveURL, eventURL, factionURL, itemURL, spellURL };
-        }
     }
 }
