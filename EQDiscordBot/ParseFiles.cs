@@ -87,7 +87,7 @@ namespace EQDiscordBot
             else
             {
                 Globals.CWLMethod("Patch File Not Found...", "Red");
-                eqPatchData = null;
+                eqPatchData = new[] { "", "", "", "" }; ;
             }
 
             return eqPatchData;
@@ -96,12 +96,12 @@ namespace EQDiscordBot
         public static Dictionary<string, string> ParseURLFile()
         {
             Dictionary<string, string> urlList = new Dictionary<string, string>();
-            string parseParseFileLoc = "config/URLData.json";
+            string urlDataFileLoc = "config/URLData.json";
             string[] urlTypes = { "achieve", "census", "event", "faction", "item", "spell" };
 
-            if (File.Exists(parseParseFileLoc))
+            if (File.Exists(urlDataFileLoc))
             {
-                JObject urlFile = JObject.Parse(File.ReadAllText(parseParseFileLoc));
+                JObject urlFile = JObject.Parse(File.ReadAllText(urlDataFileLoc));
 
                 Globals.CWLMethod("URL Data File Loaded", "Magenta");
 

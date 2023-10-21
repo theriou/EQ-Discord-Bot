@@ -20,7 +20,7 @@ namespace EQDiscordBot.Commands
 
                 Globals.CWLMethod("Patch Data Requested", "Cyan");
 
-                if (Globals.patchData == null)
+                if (string.IsNullOrWhiteSpace(Globals.patchData[0]))
                 {
                     Globals.CWLMethod("Patch Failed...", "Red");
                     patchReturn = "Patch Failed! Retry Later.";
